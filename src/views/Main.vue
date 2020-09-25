@@ -27,6 +27,7 @@
               <v-card-text>
                 <v-form>
                   <v-text-field
+                    v-model="user.email"
                     label="Login"
                     name="login"
                     prepend-icon="mdi-account"
@@ -34,6 +35,7 @@
                   ></v-text-field>
 
                   <v-text-field
+                  v-model="user.password"
                     id="password"
                     label="Password"
                     name="password"
@@ -47,6 +49,9 @@
                 
                 <v-btn color="primary"
                 to="/notice">Login</v-btn>
+
+                 <v-btn color="primary"
+                @click="getLogin">Login(post)</v-btn>
             
               </v-card-actions>
             </v-card>
@@ -58,7 +63,56 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { mapState, mapActions } from "vuex"
+var qs = require('querystring')
+
 export default {
+  data() {
+    return {
+      user: {
+        email : null,
+        password : null
+      }
+      
+    }
+  },
+
+  methods : {
+    // 로그인 버튼 클릭
+    getLogin() {
+        console.log('user: ',this.user)
+
+        const jsonData = JSON.stringify(this.user)
+        console.log('json : ', jsonData)
+      // 서버통신으로 notice 특정 데이터를 불러옴
+     
+      axios.post(`http://localhost:4000/login_process/${jsonData}`, {
+          //email : 'fred',
+          //password : 'friend'
+      })
+      .then(res => {
+            console.log('res_notice_datas : ', res)
+            //console.log('items : ', res.data.recordset)
+            //this.desserts = res.data.recordset;
+            console.log(res.data.rowsAffected)
+            var response = res.data
+
+            if(response == 'success'){
+                alert('로그인 성공')
+                this.$store.commit('loginSuccess')
+            }else {
+                alert('로그인 실패')
+                this.$store.commit('loginError')
+            }
+        }).catch(err => {
+            console.log('err : ', err)
+        })
+
+    }
+  }
+
+
 
 }
 </script>

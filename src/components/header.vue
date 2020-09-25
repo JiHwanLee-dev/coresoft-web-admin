@@ -20,7 +20,7 @@
             <v-icon>mdi-note</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>국내외 개발실적sss</v-list-item-title>
+            <v-list-item-title>국내외 개발실적</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link
@@ -29,7 +29,7 @@
             <v-icon>mdi-note</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>회사 연혁  </v-list-item-title>
+            <v-list-item-title>회사 연혁</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
          <v-list-item link

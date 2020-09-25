@@ -12,7 +12,7 @@
           align-center
         >   
         <!-- style="padding-right: 190px; padding-left: 190px; padding-top: 80px" -->
-          <h2> 회사 연혁 </h2>
+          <h2> 공지사항 </h2>
           <br>
           <hr>
           <br>
@@ -118,7 +118,8 @@ export default {
     return {
       setIndex : '',
       title : '',
-      content : ''
+      content : '',
+      index: null
     }
   },
 
@@ -131,19 +132,36 @@ export default {
 
   async created(){
     
-    const data2 = await axios.get(`http://api.coresoft.co.kr/api/v1/notice/${this.$route.query.index}`)  // 국내외 개발실적 전체보기
-    .then(res => {
-      console.log('res_detail : ', res)
-      console.log(res.data.title)
-      console.log(res.data.content)
+    // const data2 = await axios.get(`http://api.coresoft.co.kr/api/v1/notice/${this.$route.query.index}`)  // 국내외 개발실적 전체보기
+    // .then(res => {
+    //   console.log('res_detail : ', res)
+    //   console.log(res.data.title)
+    //   console.log(res.data.content)
 
-      this.title = res.data.title
-      this.content = res.data.content
+    //   this.title = res.data.title
+    //   this.content = res.data.content
      
-    })
-    .catch(err => {
-      console.log('err : ', err)
-    })
+    // })
+    // .catch(err => {
+    //   console.log('err : ', err)
+    // })
+
+      // 서버통신으로 notice 특정 데이터를 불러옴
+      console.log('index : ', this.$route.query.index);
+     const noticeData = await axios.get(`http://localhost:4000/notice/noticeDetail/${this.$route.query.index}`, {
+       //index : this.$route.query.index
+     })
+      .then(res => {
+          console.log('res_notice_datas : ', res)
+          //console.log('items : ', res.data.recordset)
+          //this.desserts = res.data.recordset;
+          console.log(res.data.recordset[0].title)
+          this.title = res.data.recordset[0].title;
+          this.content = res.data.recordset[0].content;
+      }).catch(err => {
+          console.log('err : ', err)
+      })
+
     
     
   },

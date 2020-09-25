@@ -82,7 +82,7 @@ data: () => ({
         },
         { text: '제목', sortable: false, value: 'title' },
         { text: '조회수',  sortable: false, value: 'hit' },
-        { text: '등록일',  sortable: false, value: 'rgst_Dt' },
+        { text: '등록일',  sortable: false, value: 'rgst_dt' },
       
       ],
       desserts: [],
@@ -124,28 +124,44 @@ data: () => ({
       },
     },
     
-    async created(){
 
-    this.initialize()
-   
+    async created(){ 
     console.log(this.data)
-    
+
+
+      /*
+
+      // 공지사항 API를 불러옴
       const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/notice?p=1&rpp=18&t&q') // 공지사항 전체 목록
-      //const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/companyhistory?p=1&rpp=10&t&q')  // 회사연혁 전체보기
-      //const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/archievements?p=1&rpp=87&t&q')  // 국내외 개발실적 전체보기
       .then(res => {
         console.log('res : ', res)
-        console.log(res.data.message)
-        this.msg = res.data.message
+      
         this.data2 = res.data.items
         console.log(res.data.items)
         console.log(res.data.title)
+
         this.desserts = res.data.items
         console.log('desserts : ', this.desserts);
       })
       .catch(err => {
         console.log('err : ', err)
       })
+
+      */
+
+     // 서버통신으로 notice데이터를 불러옴
+     const noticeData = await axios.get('http://localhost:4000/notice')
+      .then(res => {
+          console.log('res_notice_datas : ', res)
+          //console.log('items : ', res.data.recordset)
+          this.desserts = res.data.recordset;
+      }).catch(err => {
+          console.log('err : ', err)
+      })
+
+
+
+      
     
     
   },
@@ -153,8 +169,8 @@ data: () => ({
     methods: {
         click(value){
           for(var key in value){
-            console.log(this.desserts.indexOf(value))
-            console.log("value : " + value[key])
+            //console.log(this.desserts.indexOf(value))
+            //console.log("value : " + value[key])
           }
 
           console.log(value.idx)
@@ -172,83 +188,10 @@ data: () => ({
 
            
         },
-        searchText(){
-
-        },
+      
         
       initialize () {
-        // this.desserts = [
-        //   {
-        //     name: 'Frozen Yogurt',
-        //     calories: 159,
-        //     fat: 6.0,
-        //     carbs: 24,
-        //     protein: 4.0,
-        //   },
-        //   {
-        //     name: 'Ice cream sandwich',
-        //     calories: 237,
-        //     fat: 9.0,
-        //     carbs: 37,
-        //     protein: 4.3,
-        //   },
-        //   {
-        //     name: 'Eclair',
-        //     calories: 262,
-        //     fat: 16.0,
-        //     carbs: 23,
-        //     protein: 6.0,
-        //   },
-        //   {
-        //     name: 'Cupcake',
-        //     calories: 305,
-        //     fat: 3.7,
-        //     carbs: 67,
-        //     protein: 4.3,
-        //   },
-        //   {
-        //     name: 'Gingerbread',
-        //     calories: 356,
-        //     fat: 16.0,
-        //     carbs: 49,
-        //     protein: 3.9,
-        //   },
-        //   {
-        //     name: 'Jelly bean',
-        //     calories: 375,
-        //     fat: 0.0,
-        //     carbs: 94,
-        //     protein: 0.0,
-        //   },
-        //   {
-        //     name: 'Lollipop',
-        //     calories: 392,
-        //     fat: 0.2,
-        //     carbs: 98,
-        //     protein: 0,
-        //   },
-        //   {
-        //     name: 'Honeycomb',
-        //     calories: 408,
-        //     fat: 3.2,
-        //     carbs: 87,
-        //     protein: 6.5,
-        //   },
-        //   {
-        //     name: 'Donut',
-        //     calories: 452,
-        //     fat: 25.0,
-        //     carbs: 51,
-        //     protein: 4.9,
-        //   },
-        //   {
-        //     name: 'KitKat',
-        //     calories: 518,
-        //     fat: 26.0,
-        //     carbs: 65,
-        //     protein: 7,
-        //   },
-        // ]
+        
       },
 
  

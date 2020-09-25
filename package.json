@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
     "dns": "^0.2.2",
     "express": "^4.17.1",
     "mssql": "^6.2.2",
