@@ -37,7 +37,7 @@ async function getNoticeList(res,req){
   try {
     let pool = await sql.connect(config)
     let result1 = await pool.request()
-        .query('SELECT * FROM TB_NOTICE ORDER BY idx DESC')
+        .query(`SELECT * FROM TB_NOTICE WHERE use_yn = 'N' ORDER BY idx DESC`)
         
     //console.log(result1)
     res.send(result1)   // 클라이언트에 결과값 보냄
@@ -102,7 +102,7 @@ app.get('/register/:index', (req, res) => {
   getRegister(res, req, index);
 })
 
-// 국내외 개발실적 전체 불러오는 함수
+// 공지사항,국내외 개발실적, 회사 연혁 글 등록 함수
 async function getRegister(res, req, index){
   try {
 
@@ -112,16 +112,19 @@ async function getRegister(res, req, index){
     if(index.subject == 'notice'){
       console.log('notice')
       let result1 = await pool.request()
-          .query(`INSERT INTO `)
+          .query(`INSERT INTO TB_NOTICE(title, content, use_yn, rgst_id, rgst_dt, rgst_tm, hit) 
+          VALUES('${index.title}', '${index.content}', '${index.use_yn}', '${index.userId}', '${index.rgst_dt}','${index.rgst_tm}', ${index.hit})`)
+          res.send(index.subject)   // 클라이언트에 결과값 보냄
 
     }else if(index.subject == 'archievement'){
       console.log('archievement')
       let result1 = await pool.request()
-          .query(`INSERT INTO TB_NOTICE(title, content, rgst_id, rgst_dt, hit) VALUE()`)
+          .query(`INSERT INTO TB_BUSINESS_ARCHIEVEMENTS(title, content, use_yn, rgst_id, rgst_dt, rgst_tm, hit) VALUE()`)
+          res.send(index.subject)   // 클라이언트에 결과값 보냄
     }
 
-    console.log(result1)
-    res.send(result1)   // 클라이언트에 결과값 보냄
+    //console.log('success')
+    //res.send("success")   // 클라이언트에 결과값 보냄
 
 
     
@@ -149,7 +152,7 @@ async function getArchievement(res,req){
   try {
     let pool = await sql.connect(config)
     let result1 = await pool.request()
-        .query(`SELECT idx, (year + '.' + month) AS date, title, content FROM TB_BUSINESS_ARCHIEVEMENTS ORDER BY idx DESC`)
+        .query(`SELECT idx, (year + '.' + month) AS date, title, content FROM TB_BUSINESS_ARCHIEVEMENTS WHERE use_yn = 'Y' ORDER BY idx DESC`)
         
     //console.log(result1)
     res.send(result1)   // 클라이언트에 결과값 보냄
@@ -206,7 +209,7 @@ async function getCompanyHistory(res,req){
   try {
     let pool = await sql.connect(config)
     let result1 = await pool.request()
-        .query(`SELECT idx, (year + '.' + month) AS date, title, content FROM TB_COMPANY_HISTORY ORDER BY idx DESC`)
+        .query(`SELECT idx, (year + '.' + month) AS date, title, content FROM TB_COMPANY_HISTORY WHERE use_yn = 'Y' ORDER BY idx DESC`)
         
     //console.log(result1)
     res.send(result1)   // 클라이언트에 결과값 보냄

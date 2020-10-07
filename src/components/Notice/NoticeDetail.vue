@@ -51,7 +51,9 @@
                  </v-btn>
               </v-row>
 
+              <!-- 글 작성자만 수정,삭제를 할 수 있게 v-if속성 적용 -->
                <v-row
+              v-if="this.userInfo[0].admin_id === this.writer"
               justify="end">
                 <v-btn
                 style="margin-right: 5px;"
@@ -64,6 +66,7 @@
               삭제
                  </v-btn>
               </v-row>
+
               </v-layout>        
             </v-col>
 
@@ -107,6 +110,7 @@
 import Header from "../header.vue";
 import Footer from "../footer.vue";
 import axios from "axios";
+import { mapState } from 'vuex';
 
 export default {
   components : {
@@ -119,7 +123,8 @@ export default {
       setIndex : '',
       title : '',
       content : '',
-      index: null
+      index: null,
+      writer : null,
     }
   },
 
@@ -127,7 +132,9 @@ export default {
     getParams(){
       //setIndex = this.$route.query.index;
       return this.$route.query.index
-    }
+    },
+     
+    ...mapState(["userInfo"]),
   },
 
   async created(){
@@ -158,6 +165,7 @@ export default {
           console.log(res.data.recordset[0].title)
           this.title = res.data.recordset[0].title;
           this.content = res.data.recordset[0].content;
+          this.writer = res.data.recordset[0].rgst_id;
       }).catch(err => {
           console.log('err : ', err)
       })
@@ -169,7 +177,7 @@ export default {
   mounted(){
     window.scrollTo(0,0)  // 스크롤 위치 최상단으로 
     
-    
+
     window.onpopstate = function(event){
       //alert('뒤로가기')
     }

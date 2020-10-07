@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from 'vuex-persistedstate';
 // import sql from 'mssql'
 // import ASD from "../DB/db_config" 
 
@@ -10,6 +11,10 @@ Vue.use(Vuex);
 //console.log(test)
 
 export default new Vuex.Store({
+  // 새로고침시 vuex의 값들이 초기화가 안되게 하는 플러그인(모든 store값들이 다 localstorage에 저장. 나중에 고쳐야 됨.)
+  plugins: [
+    createPersistedState()
+  ],
   state: {
     userInfo: null,
     isLogin: false,

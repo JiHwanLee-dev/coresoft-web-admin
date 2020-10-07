@@ -12,7 +12,7 @@
           align-center
         >   
         <!-- style="padding-right: 190px; padding-left: 190px; padding-top: 80px" -->
-        vuex userInfo : {{ userInfo }}
+        vuex userInfo : {{ userInfo[0].admin_id }}
         login : {{ isLogin }}
           <h2
           v-if="subject === 'notice'"> 공지사항 
@@ -126,11 +126,17 @@ export default {
             //subject : null,
             //title : null,
             //content : null,
-
+            
+            // 디비에 보내는 객체
             boardInfo : {
                 subject : null,
                 title : null,
-                content : null
+                content : null,
+                use_yn : 'N',
+                userId : null,
+                rgst_dt : null,
+                rgst_tm : null,
+                hit : 0
             }
         }
     },
@@ -140,9 +146,11 @@ export default {
         this.subject = this.$route.params.subject
         
         this.boardInfo.subject = this.subject
+        this.boardInfo.userId = this.userInfo[0].admin_id
 
-        localStorage.getItem('LoginStatus')
+        console.log('userInfo : ',this.boardInfo)
 
+       
     },
 
         
@@ -159,6 +167,8 @@ export default {
     computed : {
         ...mapState(["userInfo"]),
         ...mapState(["isLogin"])
+
+
     },
 
     methods : {
@@ -170,23 +180,95 @@ export default {
         // 글 등록
         async getRegister(){
             //console.log('title : ', this.boardInfo.title, '  content : ', this.boardInfo.content, '  subject : ', this.boardInfo.subject)
-            console.log('info : ', this.boardInfo)
+            
+            var dt = new Date();
 
+            var year = dt.getFullYear();
+            var month = dt.getMonth() + 1;
+            var date = dt.getDate();
+            var hours = dt.getHours();
+            var minutes = dt.getMinutes();
+            var seconds = dt.getSeconds();
+            
+
+
+
+            console.log(month.toString().length)
+
+            // 한자리 수이면 앞에 0을 붙여 공백을 없앰
+
+            if(month.toString().length < 2){
+                month = "0" + month;
+            }
+
+            if(date.toString().length < 2){
+                date = "0" + date;     // read-only error. why? const를 썻기 때문. var를 쓰면 에러 안남.
+            }
+
+            if(hours.toString().length < 2){
+                hours = "0" + hours;
+            }
+
+            if(minutes.toString().length < 2){
+                minutes = "0" + minutes;
+            }
+
+            if(seconds.toString().length < 2){
+                seconds = "0" + seconds;
+            }
+
+            console.log('today : ', dt)
+            console.log('year : ', year)
+            console.log('month : ', month)
+            console.log('date : ', date)
+            console.log('hours : ', hours)
+            console.log('minutes : ', minutes)
+            console.log('seconds : ', seconds)
+
+            const rgst_dt = year + '' + month + '' + date;
+            const rgst_tm = hours + '' + minutes + '' + seconds;
+
+            console.log('rgst_dt : ', rgst_dt)
+            console.log('rgst_tm : ', rgst_tm)
+
+            this.boardInfo.rgst_dt = rgst_dt;
+            this.boardInfo.rgst_tm = rgst_tm;
+            
+            
+            console.log('boardInfo : ', this.boardInfo)
+            
+            // 문자열로 변환해서 서버에 보내줌.
             const boardInfos = JSON.stringify(this.boardInfo)
 
-
-
-            
-            
             // 서버통신으로 notice데이터를 불러옴
             const noticeData = await axios.get(`http://localhost:4000/register/${boardInfos}`)
             .then(res => {
-                console.log('res_notice_datas : ', res)
-                //console.log('items : ', res.data.recordset)
-                //this.desserts = res.data.recordset;
+                console.log('res_register_status : ', res)
+
+                // 글작성이 완료 되었으므로, 목록화면으로 가야 됨
+                if(res === 'notice'){
+                    this.$router.push(
+                        {
+                            name : 'Notice'
+                        }
+                    )
+                }else if(res === 'archievement'){
+                    this.$router.push(
+                        {
+                            name : 'Archievement'
+                        }
+                    )
+                }
+
+               
+
+
+                
             }).catch(err => {
                 console.log('err : ', err)
             })
+
+            
             
             
         }
