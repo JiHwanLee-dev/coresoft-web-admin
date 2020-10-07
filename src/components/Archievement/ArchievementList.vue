@@ -55,6 +55,23 @@
             </v-toolbar>
             </template>
         </v-data-table>
+
+        <v-layout
+          mt-3
+          align-end>
+              <v-row
+                    justify="end">
+                      <v-btn
+                      style="margin-right: 8px;"
+                      color="primary"
+                      @click="register"
+                      >
+                    등록
+                      </v-btn>
+                    
+              </v-row>
+        </v-layout>
+
         <!-- <v-flex>
                 <router-view></router-view>
             </v-flex> -->
@@ -80,31 +97,16 @@ data: () => ({
           sortable: false,
           value: 'idx',
         },
-        { text: '연혁일자', value: 'year',  sortable: false, align: 'start'},
+        { text: '개발일자', value: 'date',  sortable: false, align: 'start'},
         { text: '제목', value: 'title', sortable: false},
         { text: '내용', value: 'content',  sortable: false},
       ],
       desserts: [],
       editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      
-     
+    
      page: 1,
      pageCount: 0,
-        itemsPerPage: 10,
+     itemsPerPage: 10,
     
     select : null,
     searchText : null,
@@ -121,6 +123,8 @@ data: () => ({
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
+
+      
     },
 
     watch: {
@@ -131,12 +135,9 @@ data: () => ({
 
   async created(){
 
-    this.initialize()
     console.log(this.data)
     
-    //const data2 = await axios.get('/api/hello')
-    //const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/notice?p=1&rpp=10&t&q') // 공지사항 전체 목록
-    //const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/companyhistory?p=1&rpp=10&t&q')  // 회사연혁 전체보기
+    /*
     const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/archievements?p=1&rpp=87&t&q')  // 국내외 개발실적 전체보기
     .then(res => {
       console.log('res : ', res)
@@ -151,6 +152,18 @@ data: () => ({
     .catch(err => {
       console.log('err : ', err)
     })
+    */
+
+     // 서버통신으로 notice데이터를 불러옴
+     const noticeData = await axios.get('http://localhost:4000/archievement')
+      .then(res => {
+          console.log('res_archievement_datas : ', res)
+          //console.log('items : ', res.data.recordset)
+          this.desserts = res.data.recordset;
+      }).catch(err => {
+          console.log('err : ', err)
+      })
+
     
     
   },
@@ -158,7 +171,8 @@ data: () => ({
 
     methods: {
         click(value){
-            console.log('등록번호 : ', value.idx)
+          console.log('등록번호 : ', value.idx)
+
           for(var key in value){
             console.log(this.desserts.indexOf(value))
             console.log(this.desserts.idx)
@@ -168,7 +182,7 @@ data: () => ({
           var idx = value.idx
         
 
-
+          console.log('page : ', this.page)
 
           this.$emit("child", "showDetail");
 
@@ -193,98 +207,16 @@ data: () => ({
             console.log('분류 : ',this.select + " / " + '검색 : ', this.searchText)
         },
 
-      initialize () {
-        // this.desserts = [
-        //   {
-        //     index : 1,
-        //     name: 'Frozen Yogurt',
-        //     calories: 'ddddd',
-        //     fat: 6.0,
-        //     carbs: 24,
-        //     protein: 4.0,
-        //   },
-        //   {
-        //     index : 1,
-        //     name: 'Ice cream sandwich',
-        //     calories: 'adsdadsad',
-        //     fat: 9.0,
-        //     carbs: 37,
-        //     protein: 4.3,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'Eclair',
-        //     calories: 262,
-        //     fat: 16.0,
-        //     carbs: 23,
-        //     protein: 6.0,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'Cupcake',
-        //     calories: 305,
-        //     fat: 3.7,
-        //     carbs: 67,
-        //     protein: 4.3,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'Gingerbread',
-        //     calories: 356,
-        //     fat: 16.0,
-        //     carbs: 49,
-        //     protein: 3.9,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'Jelly bean',
-        //     calories: 375,
-        //     fat: 0.0,
-        //     carbs: 94,
-        //     protein: 0.0,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'Lollipop',
-        //     calories: 392,
-        //     fat: 0.2,
-        //     carbs: 98,
-        //     protein: 0,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'Honeycomb',
-        //     calories: 408,
-        //     fat: 3.2,
-        //     carbs: 87,
-        //     protein: 6.5,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'Donut',
-        //     calories: 452,
-        //     fat: 25.0,
-        //     carbs: 51,
-        //     protein: 4.9,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'KitKat',
-        //     calories: 518,
-        //     fat: 26.0,
-        //     carbs: 65,
-        //     protein: 7,
-        //   },
-        //   {
-        //       index : 1,
-        //     name: 'KitKat',
-        //     calories: 518,
-        //     fat: 26.0,
-        //     carbs: 65,
-        //     protein: 7,
-        //   },
-        // ]
-      },
+        register(){
+          this.$router.push(
+            {
+              name : 'Register',
+              params : {
+                subject : 'archievement'
+              }
+            }
+          )
+        }
 
      
     },

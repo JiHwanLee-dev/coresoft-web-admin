@@ -7,8 +7,9 @@
           <NoticeList/>
       </v-container>
 
+      <!-- {{ isLogin }} -->
     </v-main>
-
+    
     <v-footer
       color="indigo"
       app
@@ -28,6 +29,8 @@
 import Header from "../components/header.vue";
 import Footer from "../components/footer.vue";
 import NoticeList from "../components/Notice/NoticeList.vue";
+import { mapState } from 'vuex';
+
 export default {
     components : {
         Header,
@@ -38,6 +41,24 @@ export default {
     props : {
 
     },
+
+    created(){
+      console.log('Notice_Created')
+    },
+
+    data(){
+      return {
+        ///testData : null  
+      }
+    },
+
+    computed : {
+      testData(){
+          return this.$store.state
+      },
+
+      ...mapState(['isLogin'])
+    }
 
    
 }

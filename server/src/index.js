@@ -26,10 +26,32 @@ var qs = require('querystring');
 // express의 cors 미들웨어를 통한 cross origin 허용 설정
 app.use(cors());
 
+
 // 공지사항 전체목록 보기
 app.get('/notice', (req, res) => {
   getNoticeList(res, req);
 })
+
+// 공지사항 전체 불러오는 함수
+async function getNoticeList(res,req){
+  try {
+    let pool = await sql.connect(config)
+    let result1 = await pool.request()
+        .query('SELECT * FROM TB_NOTICE ORDER BY idx DESC')
+        
+    //console.log(result1)
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+
 
 // 공지사항 특정 데이터 보기
 // req, res 순서 안바뀌게 주의
@@ -40,6 +62,202 @@ app.get('/notice/noticeDetail/:index', (req, res) => {
   // res.send(req)   // 클라이언트에 결과값 보냄
   getNoticeDetail(res, req, index);
 })
+
+// 공지사항 상세보기
+async function getNoticeDetail(res, req, index){
+  try {
+  
+    let pool = await sql.connect(config)
+
+
+    // index에 맞는 공지사항 상세정보
+    let result1 = await pool.request()
+        .query(`SELECT * FROM TB_NOTICE WHERE idx = ${index}`)
+
+    // 조회수 1증가 쿼리
+    let result2 = await pool.request()
+        .query(`UPDATE TB_NOTICE SET hit = hit + 1 WHERE idx = ${index}`)
+        
+    //console.log(result1)
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+
+// 공지사항 글 등록
+app.get('/register/:index', (req, res) => {
+  //console.log('req : ', req.params)
+
+  const index = JSON.parse(req.params.index)
+  console.log('index : ', index)
+
+  // res.send(req)   // 클라이언트에 결과값 보냄
+  getRegister(res, req, index);
+})
+
+// 국내외 개발실적 전체 불러오는 함수
+async function getRegister(res, req, index){
+  try {
+
+    let pool = await sql.connect(config)
+
+
+    if(index.subject == 'notice'){
+      console.log('notice')
+      let result1 = await pool.request()
+          .query(`INSERT INTO `)
+
+    }else if(index.subject == 'archievement'){
+      console.log('archievement')
+      let result1 = await pool.request()
+          .query(`INSERT INTO TB_NOTICE(title, content, rgst_id, rgst_dt, hit) VALUE()`)
+    }
+
+    console.log(result1)
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+
+    
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+
+
+
+// 국내외 개발실적 전체목록 보기
+app.get('/archievement', (req, res) => {
+  getArchievement(res, req);
+
+})
+
+// 국내외 개발실적 전체 불러오는 함수
+async function getArchievement(res,req){
+  try {
+    let pool = await sql.connect(config)
+    let result1 = await pool.request()
+        .query(`SELECT idx, (year + '.' + month) AS date, title, content FROM TB_BUSINESS_ARCHIEVEMENTS ORDER BY idx DESC`)
+        
+    //console.log(result1)
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+
+// 국내외 개발실적 특정 데이터 보기
+app.get('/archievement/archievementDetail/:index', (req, res) => {
+  console.log('req : ', req.params)
+
+  const index = req.params.index
+  // res.send(req)   // 클라이언트에 결과값 보냄
+  getArchievementDetail(res, req, index);
+})
+
+// 국내외 개발실적 상세보기
+async function getArchievementDetail(res, req, index){
+  try {
+  
+    let pool = await sql.connect(config)
+
+    // index에 맞는 국내외 개발실적 상세정보
+    let result1 = await pool.request()
+        .query(`SELECT * FROM TB_BUSINESS_ARCHIEVEMENTS WHERE idx = ${index}`)
+
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+
+// 회사 연혁 전체목록 보기
+app.get('/companyHistory', (req, res) => {
+  getCompanyHistory(res, req);
+
+})
+
+// 회사 연혁 전체 불러오는 함수
+async function getCompanyHistory(res,req){
+  try {
+    let pool = await sql.connect(config)
+    let result1 = await pool.request()
+        .query(`SELECT idx, (year + '.' + month) AS date, title, content FROM TB_COMPANY_HISTORY ORDER BY idx DESC`)
+        
+    //console.log(result1)
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+// 회사 연혁 특정 데이터 보기
+app.get('/companyHistory/companyHistoryDetail/:index', (req, res) => {
+  console.log('req : ', req.params)
+
+  const index = req.params.index
+  // res.send(req)   // 클라이언트에 결과값 보냄
+  getCompanyHistoryDetail(res, req, index);
+})
+
+// 회사 연혁 상세보기
+async function getCompanyHistoryDetail(res, req, index){
+  try {
+  
+    let pool = await sql.connect(config)
+
+    // index에 맞는 회사 연혁 상세정보
+    let result1 = await pool.request()
+        .query(`SELECT * FROM TB_COMPANY_HISTORY WHERE idx = ${index}`)
+
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 로그인 정보 확인
 app.post('/login_process/:info', (req, res) => {
@@ -81,7 +299,7 @@ async function loginProcess(res, email, password){
     let result1 = await pool.request()
         //.query(`SELECT * FROM TB_NOTICE WHERE idx = 1`);
         //.query(`SELECT * FROM TB_NOTICE WHERE title = '공지사항1'`);
-        .query(`SELECT * FROM TB_ADMIN_USER WHERE admin_id = '${email}'
+        .query(`SELECT admin_id, name FROM TB_ADMIN_USER WHERE admin_id = '${email}'
                 AND pwd = '${password}'`);
       
     //console.log(result1)
@@ -99,10 +317,10 @@ async function loginProcess(res, email, password){
     // 로그인 성공
     }else{
       console.log('로그인 성공')
-      res.send('success')
+      res.send(result1)
     }
 
-    res.send(result1)   // 클라이언트에 결과값 보냄
+    //res.send(result1)   // 클라이언트에 결과값 보냄
 
   } catch (err) {
       // ... error checks
@@ -116,38 +334,9 @@ async function loginProcess(res, email, password){
 
 
 
-// 공지사항 전체 불러오는 함수
-async function getNoticeList(res,req){
-  try {
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .query('SELECT * FROM TB_NOTICE ORDER BY idx DESC')
-        
-    //console.log(result1)
-    res.send(result1)   // 클라이언트에 결과값 보냄
 
-  } catch (err) {
-      // ... error checks
-      console.log('err is ', err)
-  }
-}
 
-// 공지사항 특정 데이터 불러오기
-async function getNoticeDetail(res, req, index){
-  try {
-  
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .query(`SELECT * FROM TB_NOTICE WHERE idx = ${index}`)
-        
-    //console.log(result1)
-    res.send(result1)   // 클라이언트에 결과값 보냄
 
-  } catch (err) {
-      // ... error checks
-      console.log('err is ', err)
-  }
-}
 
 
 

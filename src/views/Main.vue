@@ -86,6 +86,9 @@ export default {
         const jsonData = JSON.stringify(this.user)
         console.log('json : ', jsonData)
       // 서버통신으로 notice 특정 데이터를 불러옴
+
+        localStorage.setItem('LoginStatus', this.user)
+        
      
       axios.post(`http://localhost:4000/login_process/${jsonData}`, {
           //email : 'fred',
@@ -95,15 +98,28 @@ export default {
             console.log('res_notice_datas : ', res)
             //console.log('items : ', res.data.recordset)
             //this.desserts = res.data.recordset;
-            console.log(res.data.rowsAffected)
+            // console.log(res.data.rowsAffected)
+
+            // 로그인 결과
             var response = res.data
 
-            if(response == 'success'){
-                alert('로그인 성공')
-                this.$store.commit('loginSuccess')
-            }else {
-                alert('로그인 실패')
+            var userInfo = res.data.recordset
+            console.log('userInfo : ', userInfo)
+            
+           
+
+            if(response == 'failed'){
+                 alert('로그인 실패')
                 this.$store.commit('loginError')
+
+            }else {
+                 alert('로그인 성공')
+                this.$store.commit('loginSuccess', userInfo)
+                      
+                // 공지사랑 전체목록
+                this.$router.push(
+                  {name : 'Notice'}
+                )
             }
         }).catch(err => {
             console.log('err : ', err)

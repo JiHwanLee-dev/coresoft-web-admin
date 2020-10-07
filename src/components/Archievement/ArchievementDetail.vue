@@ -141,6 +141,7 @@ export default {
 
   async created(){
     
+    /*
     const data2 = await axios.get(`http://api.coresoft.co.kr/api/v1/archievements/${this.$route.query.index}`)  // 국내외 개발실적 전체보기
     .then(res => {
       console.log('res_detail : ', res)
@@ -154,6 +155,27 @@ export default {
     .catch(err => {
       console.log('err : ', err)
     })
+    */
+
+
+     // 서버통신으로 notice 특정 데이터를 불러옴
+     console.log('index : ', this.$route.query.index);
+     const noticeData = await axios.get(`http://localhost:4000/archievement/archievementDetail/${this.$route.query.index}`, {
+       //index : this.$route.query.index
+     })
+      .then(res => {
+          console.log('res_notice_detail_datas : ', res)
+          //console.log('items : ', res.data.recordset)
+          //this.desserts = res.data.recordset;
+          console.log(res.data.recordset[0].title)
+          this.title = res.data.recordset[0].title;
+          this.content = res.data.recordset[0].content;
+      }).catch(err => {
+          console.log('err : ', err)
+      })
+
+
+
     
     
   },

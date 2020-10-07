@@ -147,12 +147,12 @@ export default {
     // })
 
       // 서버통신으로 notice 특정 데이터를 불러옴
-      console.log('index : ', this.$route.query.index);
+     console.log('index : ', this.$route.query.index);
      const noticeData = await axios.get(`http://localhost:4000/notice/noticeDetail/${this.$route.query.index}`, {
        //index : this.$route.query.index
      })
       .then(res => {
-          console.log('res_notice_datas : ', res)
+          console.log('res_notice_detail_datas : ', res)
           //console.log('items : ', res.data.recordset)
           //this.desserts = res.data.recordset;
           console.log(res.data.recordset[0].title)
@@ -168,6 +168,11 @@ export default {
 
   mounted(){
     window.scrollTo(0,0)  // 스크롤 위치 최상단으로 
+    
+    
+    window.onpopstate = function(event){
+      //alert('뒤로가기')
+    }
   },
 
   methods : {
@@ -177,9 +182,11 @@ export default {
       this.$router.push(
         {
           name : 'Notice'
+       
         }
       )
-    }
+    },
+   
   }
 }
 </script>

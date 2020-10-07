@@ -58,9 +58,25 @@
     </template>
     
   </v-data-table>
-  <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="pageCount"></v-pagination>
- </div>
+    <v-layout
+    mt-3
+    align-end>
+        <v-row
+              justify="end">
+                <v-btn
+                style="margin-right: 8px;"
+                color="primary"
+                @click="register"
+                >
+              등록
+                 </v-btn>
+               
+        </v-row>
+    </v-layout>
+ 
+    <div class="text-center pt-2">
+          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+    </div>
 
   </div>
     
@@ -70,6 +86,7 @@
 <script>
 /* eslint-disable */
 import axios from 'axios'
+
 export default {
 data: () => ({
       dialog: false,
@@ -126,7 +143,7 @@ data: () => ({
     
 
     async created(){ 
-    console.log(this.data)
+    //console.log(this.data)
 
 
       /*
@@ -158,11 +175,6 @@ data: () => ({
       }).catch(err => {
           console.log('err : ', err)
       })
-
-
-
-      
-    
     
   },
 
@@ -175,6 +187,9 @@ data: () => ({
 
           console.log(value.idx)
 
+          console.log('page : ', this.page)
+          console.log('pageCount : ', this.pageCount)
+
           var idx = value.idx
 
           // 상세보기
@@ -184,15 +199,20 @@ data: () => ({
                 index : idx
               }
             }
-          )
-
-           
+          ) 
         },
       
-        
-      initialize () {
-        
-      },
+      // 글 등록 함수
+      register(){
+        this.$router.push(
+          {
+            name : 'Register',
+            params : {
+              subject : 'notice'
+            }
+          }
+        )
+      }
 
  
     },

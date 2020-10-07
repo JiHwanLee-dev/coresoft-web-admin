@@ -17,13 +17,13 @@ export default new Vuex.Store({
   },
   mutations: {
     // 로그인이 성공했을 때
-    loginSuccess(state){   // payload : actions에서 로그인 성공 시 , 해당 유저의 정보를 담고있는 변수
+    loginSuccess(state, payload){   // payload : actions에서 로그인 성공 시 , 해당 유저의 정보를 담고있는 변수
       state.isLogin = true
       state.isLoginError = false
-      //state.userInfo = payload
+      state.userInfo = payload
     },
+
     // 로그인이 실패했을 때
-    
     loginError(state){
       state.isLogin = false
       state.isLoginError = true
