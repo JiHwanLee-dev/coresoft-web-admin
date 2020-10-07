@@ -91,7 +91,7 @@ async function getNoticeDetail(res, req, index){
 
 
 
-// 공지사항 글 등록
+// 공지사항, 국내외 개발실적, 회사 연혁 글 등록
 app.get('/register/:index', (req, res) => {
   //console.log('req : ', req.params)
 
@@ -125,14 +125,52 @@ async function getRegister(res, req, index){
 
     //console.log('success')
     //res.send("success")   // 클라이언트에 결과값 보냄
-
-
-    
-
   } catch (err) {
       // ... error checks
       console.log('err is ', err)
   }
+}
+
+
+// 공지사항, 국내외 개발실적, 회사 연혁 글 수정
+app.get('/update/:index', (req, res) => {
+  //console.log('req : ', req.params)
+
+  const index = JSON.parse(req.params.index)
+  console.log('index : ', index)
+
+  // res.send(req)   // 클라이언트에 결과값 보냄
+  getUpdate(res, req, index);
+})
+
+// 공지사항,국내외 개발실적, 회사 연혁 글 수정 함수
+async function getUpdate(res, req, index){
+  try {
+
+    let pool = await sql.connect(config)
+
+    if(index.subject == 'notice'){
+      console.log('notice')
+      let result1 = await pool.request()
+          .query(`UPDATE TB_NOTICE SET title = '${index.title}', content = '${index.content}', mdfy_id = '${index.userId}', mdfy_dt = '${index.mdfy_dt}',mdfy_tm = '${index.mdfy_tm}' 
+                WHERE idx = ${index.index}`)
+          res.send(index.subject)   // 클라이언트에 결과값 보냄
+
+    }else if(index.subject == 'archievement'){
+      console.log('archievement')
+      let result1 = await pool.request()
+          .query(`UPDATE TB_NOTICE SET title = '${index.title}', content = '${index.content}', mdfy_id = '${index.userId}', mdfy_dt = '${index.mdfy_dt}',mdfy_tm = '${index.mdfy_tm}' 
+                WHERE idx = ${index.index}`)
+          res.send(index.subject)   // 클라이언트에 결과값 보냄
+    }
+
+    //console.log('success')
+    //res.send("success")   // 클라이언트에 결과값 보냄
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+
 }
 
 

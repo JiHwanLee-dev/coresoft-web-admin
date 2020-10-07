@@ -58,6 +58,7 @@
                 <v-btn
                 style="margin-right: 5px;"
                 color="error"
+                @click="update"
                 >
               수정
                  </v-btn>
@@ -120,7 +121,6 @@ export default {
 
   data() {
     return {
-      setIndex : '',
       title : '',
       content : '',
       index: null,
@@ -130,7 +130,6 @@ export default {
 
   computed : {
     getParams(){
-      //setIndex = this.$route.query.index;
       return this.$route.query.index
     },
      
@@ -138,20 +137,6 @@ export default {
   },
 
   async created(){
-    
-    // const data2 = await axios.get(`http://api.coresoft.co.kr/api/v1/notice/${this.$route.query.index}`)  // 국내외 개발실적 전체보기
-    // .then(res => {
-    //   console.log('res_detail : ', res)
-    //   console.log(res.data.title)
-    //   console.log(res.data.content)
-
-    //   this.title = res.data.title
-    //   this.content = res.data.content
-     
-    // })
-    // .catch(err => {
-    //   console.log('err : ', err)
-    // })
 
       // 서버통신으로 notice 특정 데이터를 불러옴
      console.log('index : ', this.$route.query.index);
@@ -169,8 +154,6 @@ export default {
       }).catch(err => {
           console.log('err : ', err)
       })
-
-    
     
   },
 
@@ -194,6 +177,24 @@ export default {
         }
       )
     },
+
+    // 글 수정
+    update(){
+      this.$router.push(
+        {
+          name : 'Update',
+          params : {
+            subject : 'notice',
+            title : this.title,
+            content : this.content,
+            writer : this.writer,
+            index : this.$route.query.index
+          }
+
+
+        }
+      )
+    }
    
   }
 }

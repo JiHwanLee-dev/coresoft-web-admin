@@ -1,6 +1,5 @@
 <template>
-
- <v-app id="inspire">
+    <v-app id="inspire">
         <Header/>
   
     
@@ -12,8 +11,6 @@
           align-center
         >   
         <!-- style="padding-right: 190px; padding-left: 190px; padding-top: 80px" -->
-        vuex userInfo : {{ userInfo[0].admin_id }}
-        login : {{ isLogin }}
           <h2
           v-if="subject === 'notice'"> 공지사항 
           </h2>
@@ -21,9 +18,6 @@
           <h2
           v-else-if="subject === 'archievement'"> 국내외 개발실적 
           </h2>
-
-
-
           <br>
           <hr>
           <br>
@@ -31,9 +25,12 @@
               sm="8"
               cols="12" >
               <v-text-field
-                v-model="boardInfo.title"
                 label="제목"
-                outlined
+                outlined   
+                :value="boardInfo.title" 
+                v-model="boardInfo.title"
+                
+                
               ></v-text-field>
             </v-col>
             
@@ -46,7 +43,10 @@
                 outlined
                 name="input-7-4"
                 label="내용"
+                :value="boardInfo.content"
                 v-model="boardInfo.content"
+              
+                
               ></v-textarea>
               
               <v-layout
@@ -55,32 +55,27 @@
                <v-row>
                 <v-btn
                 color="primary"
-                @click="getList">
+                >
               목록
                  </v-btn>
               </v-row>
 
-               <v-row
+                <v-row
               justify="end">
 
         
                  <v-btn
                 color="warning"
-                @click="getRegister">
-                등록
+                @click="getUpdate"
+              >
+                수정하기
                  </v-btn>
               </v-row>
+             
+              
+
               </v-layout>        
             </v-col>
-
-          <!-- <v-col cols="12">
-            <v-text-field
-              value="John Doe"
-              label="제목"
-              outlined
-              readonly
-            ></v-text-field>
-          </v-col> -->
 
         </v-layout>
       
@@ -104,82 +99,72 @@
       </v-container>
 
     </v-main> -->
-
-
-  
 </template>
 
 <script>
 import Header from "./header.vue";
 import Footer from "./footer.vue";
-import axios from 'axios'
 import { mapState } from 'vuex';
+import axios from 'axios'
 
 export default {
-  components : {
+     components : {
         Header,
         Footer,
     },
 
-    data(){
-        return {
-            //subject : null,
-            //title : null,
-            //content : null,
-            
-            // 디비에 보내는 객체
-            boardInfo : {
-                subject : null,
-                title : null,
-                content : null,
-                use_yn : 'N',
-                userId : null,
-                rgst_dt : null,
-                rgst_tm : null,
-                hit : 0
-            }
-        }
-    },
-
-    created(){
-        console.log(this.$route.params.subject)
-
-        this.subject = this.$route.params.subject
-        this.boardInfo.subject = this.subject
-        this.boardInfo.userId = this.userInfo[0].admin_id
-
-        console.log('userInfo : ',this.boardInfo)
-    },
-
-        
-    mounted(){
+  mounted(){
         window.scrollTo(0,0)  // 스크롤 위치 최상단으로 
-        
-        //console.log(this.$route.params.title)
         window.onpopstate = function(event){
         //alert('뒤로가기')
         }
+  },
 
-    },
+  data(){
+      return {
+          subject : null,
+          basicTitle : null,
+          basicContent : null,
+          subject : null,
 
-    computed : {
-        ...mapState(["userInfo"]),
-        ...mapState(["isLogin"])
+          boardInfo : {
+                index : null,
+                subject : null,
+                title : null,
+                content : null,
+                userId : null,
+                mdfy_dt : null,
+                mdfy_tm : null,
+                hit : 0
+            }
+      }
+  },
+
+    created(){
+
+        console.log(this.$route.params)
+        this.subject = this.$route.params.subject
+      
+        this.boardInfo.subject = this.subject
+        this.boardInfo.title = this.$route.params.title
+        this.boardInfo.content = this.$route.params.content
+        this.boardInfo.index = this.$route.params.index
+
+        console.log(this.boardInfo.title)
+        console.log(this.boardInfo.content)
+
+        this.boardInfo.userId = this.userInfo[0].admin_id
+
+  },
 
 
-    },
 
-    methods : {
-        // 목록으로 돌아가기
-        getList(){
+  methods : {
+      // 수정하기 클릭 함수
+    async getUpdate(){
+        // alert('aa');
 
-        },
-
-        // 글 등록
-        async getRegister(){
-            //console.log('title : ', this.boardInfo.title, '  content : ', this.boardInfo.content, '  subject : ', this.boardInfo.subject)
-            
-            var dt = new Date();
+        var dt = new Date();
 
             var year = dt.getFullYear();
             var month = dt.getMonth() + 1;
@@ -218,43 +203,39 @@ export default {
             console.log('minutes : ', minutes)
             console.log('seconds : ', seconds)
 
-            const rgst_dt = year + '' + month + '' + date;
-            const rgst_tm = hours + '' + minutes + '' + seconds;
+            const mdfy_dt = year + '' + month + '' + date;
+            const mdfy_tm = hours + '' + minutes + '' + seconds;
 
-            console.log('rgst_dt : ', rgst_dt)
-            console.log('rgst_tm : ', rgst_tm)
+            console.log('rgst_dt : ', mdfy_dt)
+            console.log('rgst_tm : ', mdfy_tm)
 
-            this.boardInfo.rgst_dt = rgst_dt;
-            this.boardInfo.rgst_tm = rgst_tm;
-            
-            
-            console.log('boardInfo : ', this.boardInfo)
-            
-            // 문자열로 변환해서 서버에 보내줌.
-            const boardInfos = JSON.stringify(this.boardInfo)
+            this.boardInfo.mdfy_dt = mdfy_dt;
+            this.boardInfo.mdfy_tm = mdfy_tm;
 
-            // 서버통신으로 notice데이터를 불러옴
-            const noticeData = await axios.get(`http://localhost:4000/register/${boardInfos}`)
+            
+        console.log('info : ', this.boardInfo)
+
+         // 문자열로 변환해서 서버에 보내줌.
+        const boardInfos = JSON.stringify(this.boardInfo)
+
+        
+
+        // 서버통신으로 notice데이터를 불러옴
+            const noticeData = await axios.get(`http://localhost:4000/update/${boardInfos}`)
             .then(res => {
-                console.log('res_register_status : ', res)
+                console.log('res_update_status : ', res.data)
 
                 // 글작성이 완료 되었으므로, 목록화면으로 가야 됨
-                if(res === 'notice'){
+                if(res.data === 'notice'){
                     this.$router.push(
                         {
                             name : 'Notice'
                         }
                     )
-                }else if(res === 'archievement'){
+                }else if(res.data === 'archievement'){
                     this.$router.push(
                         {
                             name : 'Archievement'
-                        }
-                    )
-                }else if(res === 'companyHistory'){
-                    this.$router.push(
-                        {
-                            name : 'CompanyHistory'
                         }
                     )
                 }
@@ -262,11 +243,17 @@ export default {
                 console.log('err : ', err)
             })
 
+
             
-            
-            
-        }
+
     }
+  },
+
+  computed : {
+        ...mapState(["userInfo"]),
+    },
+
+
 }
 </script>
 
