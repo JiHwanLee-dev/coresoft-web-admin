@@ -26,7 +26,7 @@
                 readonly
               ></v-text-field>
             </v-col>
-            <!-- {{ getParams }} -->
+
             <v-col 
               cols="12" 
               sm="8"
@@ -47,7 +47,7 @@
                 <v-btn
                 color="primary"
                 @click="getList">
-              목록
+                 목록
                  </v-btn>
               </v-row>
 
@@ -67,33 +67,10 @@
               삭제
                  </v-btn>
               </v-row>
-              </v-layout>
-             
-
-              
+              </v-layout>      
             </v-col>
-
-            
-
-            
-            
-
-
-        
-          <!-- <v-col cols="12">
-            <v-text-field
-              value="John Doe"
-              label="제목"
-              outlined
-              readonly
-            ></v-text-field>
-          </v-col> -->
-
         </v-layout>
-      
       </v-container>
-
-   
 
     <v-footer
       color="indigo"
@@ -103,15 +80,6 @@
       
     </v-footer>
   </v-app>
-
-   <!-- <v-main>
-      <v-container>
-         <h1> DevResultDetails </h1>
-      {{ getParams }}
-      </v-container>
-
-    </v-main> -->
-
 
   
 </template>
@@ -130,7 +98,6 @@ export default {
 
   data() {
     return {
-      setIndex : '',
       title : '',
       content : '',
       writer : null,
@@ -149,32 +116,15 @@ export default {
   },
 
   computed : {
-    getParams(){
-      //setIndex = this.$route.query.index;
-      return this.$route.query.index
-    },
-
     ...mapState(["userInfo"]),
   },
 
+
   async created(){
+    // vuex의 state에 저장되있는 유저의 admin_id 저장
+    this.boardInfo.userId = this.userInfo[0].admin_id
     
-    /*
-    const data2 = await axios.get(`http://api.coresoft.co.kr/api/v1/archievements/${this.$route.query.index}`)  // 국내외 개발실적 전체보기
-    .then(res => {
-      console.log('res_detail : ', res)
-      console.log(res.data.title)
-      console.log(res.data.content)
-
-      this.title = res.data.title
-      this.content = res.data.content
-     
-    })
-    .catch(err => {
-      console.log('err : ', err)
-    })
-    */
-
+    this.boardInfo.index = this.$route.query.index;
 
      // 서버통신으로 notice 특정 데이터를 불러옴
      console.log('index : ', this.$route.query.index);
@@ -182,9 +132,7 @@ export default {
        //index : this.$route.query.index
      })
       .then(res => {
-          console.log('res_notice_detail_datas : ', res)
-          //console.log('items : ', res.data.recordset)
-          //this.desserts = res.data.recordset;
+          console.log('res_archievement_detail_datas : ', res)
           console.log(res.data.recordset[0].title)
           this.title = res.data.recordset[0].title;
           this.content = res.data.recordset[0].content;
@@ -216,7 +164,7 @@ export default {
       )
     },
 
-    // 수정
+    // 수정하기 함수
     update() {
 
       this.$router.push(
@@ -235,8 +183,89 @@ export default {
       )
     },
 
-    deletes() {
+    async deletes() {
+      var delConfirm = confirm('글을 삭제하시겠습니까?')
+      if(delConfirm){
+        // 삭제하기
 
+        var dt = new Date();
+
+            var year = dt.getFullYear();
+            var month = dt.getMonth() + 1;
+            var date = dt.getDate();
+            var hours = dt.getHours();
+            var minutes = dt.getMinutes();
+            var seconds = dt.getSeconds();
+
+            // 한자리 수이면 앞에 0을 붙여 공백을 없앰
+
+            if(month.toString().length < 2){
+                month = "0" + month;
+            }
+
+            if(date.toString().length < 2){
+                date = "0" + date;     // read-only error. why? const를 썻기 때문. var를 쓰면 에러 안남.
+            }
+
+            if(hours.toString().length < 2){
+                hours = "0" + hours;
+            }
+
+            if(minutes.toString().length < 2){
+                minutes = "0" + minutes;
+            }
+
+            if(seconds.toString().length < 2){
+                seconds = "0" + seconds;
+            }
+            const del_dt = year + '' + month + '' + date;
+            const del_tm = hours + '' + minutes + '' + seconds;
+
+            this.boardInfo.del_dt = del_dt;
+            this.boardInfo.del_tm = del_tm;
+
+        // 서버통신으로 notice 특정 데이터를 불러옴
+        //console.log('index : ', this.$route.query.index);
+
+        // 문자열로 변환해서 서버에 보내줌.
+        const boardInfos = JSON.stringify(this.boardInfo)
+
+        console.log('boardInfo : ', boardInfos);
+        const noticeData = await axios.get(`http://localhost:4000/delete/${boardInfos}`, {
+          //index : this.$route.query.index
+        })
+        .then(res => {
+            console.log('res_delete_datas : ', res)
+        
+            // 글작성이 완료 되었으므로, 목록화면으로 가야 됨
+                if(res.data === 'notice'){
+                    this.$router.push(
+                        {
+                            name : 'Notice'
+                        }
+                    )
+                }else if(res.data === 'archievement'){
+                    this.$router.push(
+                        {
+                            name : 'Archievement'
+                        }
+                    )
+                }else if(res.data === 'companyHistory'){
+                    this.$router.push(
+                        {
+                            name : 'CompanyHistory'
+                        }
+                    )
+                }
+        }).catch(err => {
+            console.log('err : ', err)
+        })
+        
+
+      }else{
+        // 삭제취소
+        //alert('취소취소')
+      }
     }
   }
 }

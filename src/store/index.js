@@ -1,26 +1,21 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from 'vuex-persistedstate';
-// import sql from 'mssql'
-// import ASD from "../DB/db_config" 
-
-//var test = require("./node_modules/mssql");
 
 Vue.use(Vuex);
-
-//console.log(test)
 
 export default new Vuex.Store({
   // 새로고침시 vuex의 값들이 초기화가 안되게 하는 플러그인(모든 store값들이 다 localstorage에 저장. 나중에 고쳐야 됨.)
   plugins: [
     createPersistedState()
   ],
+
   state: {
     userInfo: null,
     isLogin: false,
     isLoginError: false,
-    year : [
-      '2020','2019','2018','2017'
+    years : [
+      '2020','2019','2018','2017','2016','2015'
     ],
     month : [
       '01','02','03','04','05','06','07','08','09','10','11','12'
@@ -39,6 +34,13 @@ export default new Vuex.Store({
       state.isLogin = false
       state.isLoginError = true
     },
+
+    // 로그아웃 버튼 클릭 시 동작
+    logout(state) {
+      state.isLogin = false
+      state.isLoginError = false
+      state.userInfo = null
+    }
   },
   actions: {},
   modules: {}

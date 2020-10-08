@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+  style="text-align: center;">
+
     <v-data-table
     :headers="headers"
     :items="desserts"
@@ -14,6 +16,7 @@
     @page-count="pageCount = $event"
     @click:row="click"
   >
+    ads
     <template v-slot:top>
       <v-toolbar flat color="white"
       style="margin-bottom:30px;">
@@ -165,6 +168,11 @@ data: () => ({
       })
 
       */
+
+    
+    //console.log('aa: ' , localStorage)
+
+    //console.log('aa:dada ')
 
      // 서버통신으로 notice데이터를 불러옴
      const noticeData = await axios.get('http://localhost:4000/notice')

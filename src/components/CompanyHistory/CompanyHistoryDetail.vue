@@ -52,15 +52,18 @@
               </v-row>
 
                <v-row
+               v-if="this.userInfo[0].admin_id === this.writer"
               justify="end">
                 <v-btn
                 style="margin-right: 5px;"
                 color="error"
+                @click="update"
                 >
               수정
                  </v-btn>
                  <v-btn
-                color="warning">
+                color="warning"
+                @click="deletes">
               삭제
                  </v-btn>
               </v-row>
@@ -107,6 +110,7 @@
 import Header from "../header.vue";
 import Footer from "../footer.vue";
 import axios from "axios";
+import { mapState } from 'vuex';
 
 export default {
   components : {
@@ -118,7 +122,19 @@ export default {
     return {
       setIndex : '',
       title : '',
-      content : ''
+      content : '',
+      writer : null,
+      year : null,
+      month : null,
+
+      boardInfo : {
+        index : null,
+        subject : 'companyHistory',
+        userId : null,
+        del_dt : null,
+        del_tm : null,
+        use_yn : 'N'
+      }
     }
   },
 
@@ -126,7 +142,9 @@ export default {
     getParams(){
       //setIndex = this.$route.query.index;
       return this.$route.query.index
-    }
+    },
+      ...mapState(["userInfo"]),
+
   },
 
   async created(){
@@ -147,6 +165,8 @@ export default {
     })
     */
 
+    this.boardInfo.userId = this.userInfo[0].admin_id
+    this.boardInfo.index = this.$route.query.index;
    
       // 서버통신으로 notice 특정 데이터를 불러옴
      console.log('index : ', this.$route.query.index);
@@ -160,6 +180,9 @@ export default {
           console.log(res.data.recordset[0].title)
           this.title = res.data.recordset[0].title;
           this.content = res.data.recordset[0].content;
+          this.writer = res.data.recordset[0].rgst_id;
+          this.year = res.data.recordset[0].year;
+          this.month = res.data.recordset[0].month;
       }).catch(err => {
           console.log('err : ', err)
       })
@@ -181,6 +204,108 @@ export default {
           name : 'CompanyHistory'
         }
       )
+    },
+
+    update() {
+       this.$router.push(
+        {
+          name : 'Update',
+          params : {
+            subject : 'companyHistory',
+            title : this.title,
+            content : this.content,
+            writer : this.writer,
+            index : this.$route.query.index,
+            year : this.year,
+            month : this.month,
+          }
+        }
+      )
+    },
+
+    async deletes() {
+      var delConfirm = confirm('글을 삭제하시겠습니까?')
+      if(delConfirm){
+        // 삭제하기
+
+        var dt = new Date();
+
+            var year = dt.getFullYear();
+            var month = dt.getMonth() + 1;
+            var date = dt.getDate();
+            var hours = dt.getHours();
+            var minutes = dt.getMinutes();
+            var seconds = dt.getSeconds();
+
+            // 한자리 수이면 앞에 0을 붙여 공백을 없앰
+
+            if(month.toString().length < 2){
+                month = "0" + month;
+            }
+
+            if(date.toString().length < 2){
+                date = "0" + date;     // read-only error. why? const를 썻기 때문. var를 쓰면 에러 안남.
+            }
+
+            if(hours.toString().length < 2){
+                hours = "0" + hours;
+            }
+
+            if(minutes.toString().length < 2){
+                minutes = "0" + minutes;
+            }
+
+            if(seconds.toString().length < 2){
+                seconds = "0" + seconds;
+            }
+            const del_dt = year + '' + month + '' + date;
+            const del_tm = hours + '' + minutes + '' + seconds;
+
+            this.boardInfo.del_dt = del_dt;
+            this.boardInfo.del_tm = del_tm;
+
+        // 서버통신으로 notice 특정 데이터를 불러옴
+        //console.log('index : ', this.$route.query.index);
+
+        // 문자열로 변환해서 서버에 보내줌.
+        const boardInfos = JSON.stringify(this.boardInfo)
+
+        console.log('boardInfo : ', boardInfos);
+        const noticeData = await axios.get(`http://localhost:4000/delete/${boardInfos}`, {
+          //index : this.$route.query.index
+        })
+        .then(res => {
+            console.log('res_delete_datas : ', res)
+        
+            // 글작성이 완료 되었으므로, 목록화면으로 가야 됨
+                if(res.data === 'notice'){
+                    this.$router.push(
+                        {
+                            name : 'Notice'
+                        }
+                    )
+                }else if(res.data === 'archievement'){
+                    this.$router.push(
+                        {
+                            name : 'Archievement'
+                        }
+                    )
+                }else if(res.data === 'companyHistory'){
+                    this.$router.push(
+                        {
+                            name : 'CompanyHistory'
+                        }
+                    )
+                }
+        }).catch(err => {
+            console.log('err : ', err)
+        })
+        
+
+      }else{
+        // 삭제취소
+        //alert('취소취소')
+      }
     }
   }
 }

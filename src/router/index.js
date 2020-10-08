@@ -2,8 +2,22 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 // import Home from "../views/Home.vue";
 import Main from "../views/Main.vue"
+import store from "../store"
+
 
 Vue.use(VueRouter)
+
+// 가드함수(redirect)
+const OnlyAuthUser = (to, from, next) => {
+  if(store.state.isLogin === false){
+    // 아직 로그인이 안된 유저면 로그인 화면이로 리다이렉트 시킴
+    alert('로그인을 해주세요.')
+    next('/')
+  }else{
+    next()
+  }
+}
+
 
 const routes = [
   {
@@ -68,12 +82,14 @@ const routes = [
   {
     path: "/register",
     name: "Register",
+    beforeEnter : OnlyAuthUser,
     component: () =>
       import(/* webpackChunkName: "about" */ "../components/Register.vue")
   },
   {
     path: "/update",
     name: "Update",
+    beforeEnter : OnlyAuthUser,
     component: () =>
       import(/* webpackChunkName: "about" */ "../components/Update.vue")
   }

@@ -33,7 +33,7 @@
                     sm="6"
                 >
                     <v-select
-                    :items="this.year"
+                    :items="this.years"
                     label="년"
                     v-model="boardInfo.year"
                     ></v-select>
@@ -284,7 +284,7 @@ export default {
 
   computed : {
         ...mapState(["userInfo"]),
-        ...mapState(["year"]),
+        ...mapState(["years"]),
         ...mapState(["month"]),
     },
 

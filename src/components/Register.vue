@@ -12,8 +12,8 @@
           align-center
         >   
         <!-- style="padding-right: 190px; padding-left: 190px; padding-top: 80px" -->
-        vuex userInfo : {{ userInfo[0].admin_id }}
-        login : {{ isLogin }}
+        <!-- vuex userInfo : {{ userInfo }}
+        login : {{ isLogin }} -->
           <h2
           v-if="subject === 'notice'"> 공지사항 
           </h2>
@@ -37,7 +37,7 @@
                     sm="6"
                 >
                     <v-select
-                    :items="this.year"
+                    :items="this.years"
                     label="년"
                     v-model="boardInfo.select_year"
                     ></v-select>
@@ -162,7 +162,7 @@ export default {
                 subject : null,
                 title : null,
                 content : null,
-                use_yn : 'N',              // 테스트로 N 
+                use_yn : 'Y',              // 테스트로 N 
                 userId : null,
                 rgst_dt : null,
                 rgst_tm : null,
@@ -177,6 +177,7 @@ export default {
 
     created(){
         console.log(this.$route.params.subject)
+        console.log(this.year)
 
         this.subject = this.$route.params.subject
         this.boardInfo.subject = this.subject
@@ -199,7 +200,7 @@ export default {
     computed : {
         ...mapState(["userInfo"]),
         ...mapState(["isLogin"]),
-        ...mapState(["year"]),
+        ...mapState(["years"]),
         ...mapState(["month"]),
 
 

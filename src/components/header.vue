@@ -32,7 +32,7 @@
             <v-list-item-title>회사 연혁</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-         <v-list-item link
+         <!-- <v-list-item link
          router :to="{name : 'About'}" exact>
           <v-list-item-action>
             <v-icon>mdi-note</v-icon>
@@ -40,7 +40,7 @@
           <v-list-item-content>
             <v-list-item-title>TEST</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
       </v-list>
       
     </v-navigation-drawer>
@@ -76,7 +76,7 @@
       </template>
       <v-list>
         <v-list-item
-         @click="$store.dispatch('logout')">    <!-- store안에 actions에 접근할려면 dispatch()함수를 써야 접근이 됨. -->
+         @click="logout">    <!-- store안에 actions에 접근할려면 dispatch()함수를 써야 접근이 됨. -->
           <v-list-item-title> Log Out </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -98,6 +98,19 @@ export default {
     computed : {
         ...mapState(["isLogin"])
     },
+
+    methods : {
+      logout() {
+        this.$store.commit('logout')
+
+        // Main화면으로//
+        this.$router.push(
+          {
+             name : 'Main'
+          }
+         )
+      }
+    }
 }
 </script>
 
