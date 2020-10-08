@@ -41,6 +41,23 @@
             </v-toolbar>
             </template>
         </v-data-table>
+
+        <v-layout
+          mt-3
+          align-end>
+              <v-row
+                    justify="end">
+                      <v-btn
+                      style="margin-right: 8px;"
+                      color="primary"
+                      @click="register"
+                      >
+                    등록
+                      </v-btn>
+                    
+              </v-row>
+        </v-layout>
+
         <div class="text-center pt-2">
         <v-pagination v-model="page" :length="pageCount"></v-pagination>
       
@@ -108,23 +125,6 @@ data: () => ({
     },
 
     async created(){
-      
-      /*
-      const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/companyhistory?p=1&rpp=24&t&q')  // 회사연혁 전체보기
-      .then(res => {
-        console.log('res : ', res)
-        console.log(res.data.message)
-        this.msg = res.data.message
-        this.data2 = res.data.items
-        console.log(res.data.items)
-        console.log(res.data.title)
-        this.desserts = res.data.items
-        console.log('desserts : ', this.desserts);
-      })
-      .catch(err => {
-        console.log('err : ', err)
-      })
-      */
 
      // 서버통신으로 notice데이터를 불러옴
      const noticeData = await axios.get('http://localhost:4000/companyHistory')
@@ -135,9 +135,6 @@ data: () => ({
       }).catch(err => {
           console.log('err : ', err)
       })
-
-    
-    
   },
 
     methods: {
@@ -169,6 +166,18 @@ data: () => ({
         btnSearchMenu() {
             console.log('분류 : ',this.select + " / " + '검색 : ', this.searchText)
         },
+
+        // 글 작성
+        register(){
+          this.$router.push(
+            {
+              name : 'Register',
+              params : {
+                subject : 'companyHistory'
+              }
+            }
+          )
+        }
 
     
 

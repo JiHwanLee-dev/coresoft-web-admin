@@ -52,15 +52,18 @@
               </v-row>
 
                <v-row
-              justify="end">
+              justify="end"
+              v-if="this.userInfo[0].admin_id === this.writer">
                 <v-btn
                 style="margin-right: 5px;"
                 color="error"
+                @click="update"
                 >
               수정
                  </v-btn>
                  <v-btn
-                color="warning">
+                color="warning"
+                @click="deletes">
               삭제
                  </v-btn>
               </v-row>
@@ -117,6 +120,7 @@
 import Header from "../header.vue";
 import Footer from "../footer.vue";
 import axios from "axios";
+import { mapState } from 'vuex';
 
 export default {
   components : {
@@ -128,7 +132,19 @@ export default {
     return {
       setIndex : '',
       title : '',
-      content : ''
+      content : '',
+      writer : null,
+      year : null,
+      month : null,
+
+      boardInfo : {
+        index : null,
+        subject : 'archievement',
+        userId : null,
+        del_dt : null,
+        del_tm : null,
+        use_yn : 'N'
+      }
     }
   },
 
@@ -136,7 +152,9 @@ export default {
     getParams(){
       //setIndex = this.$route.query.index;
       return this.$route.query.index
-    }
+    },
+
+    ...mapState(["userInfo"]),
   },
 
   async created(){
@@ -160,7 +178,7 @@ export default {
 
      // 서버통신으로 notice 특정 데이터를 불러옴
      console.log('index : ', this.$route.query.index);
-     const noticeData = await axios.get(`http://localhost:4000/archievement/archievementDetail/${this.$route.query.index}`, {
+     const archievementData = await axios.get(`http://localhost:4000/archievement/archievementDetail/${this.$route.query.index}`, {
        //index : this.$route.query.index
      })
       .then(res => {
@@ -170,6 +188,9 @@ export default {
           console.log(res.data.recordset[0].title)
           this.title = res.data.recordset[0].title;
           this.content = res.data.recordset[0].content;
+          this.writer = res.data.recordset[0].rgst_id;
+          this.year = res.data.recordset[0].year;
+          this.month = res.data.recordset[0].month;
       }).catch(err => {
           console.log('err : ', err)
       })
@@ -193,6 +214,29 @@ export default {
           name : 'Archievement'
         }
       )
+    },
+
+    // 수정
+    update() {
+
+      this.$router.push(
+        {
+          name : 'Update',
+          params : {
+            subject : 'archievement',
+            title : this.title,
+            content : this.content,
+            writer : this.writer,
+            index : this.$route.query.index,
+            year : this.year,
+            month : this.month,
+          }
+        }
+      )
+    },
+
+    deletes() {
+
     }
   }
 }

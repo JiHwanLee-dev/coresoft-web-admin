@@ -53,11 +53,41 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>CoreSoft</v-toolbar-title>
+      <v-spacer></v-spacer>
+     
+      <!-- <v-btn icon
+      v-if="isLogin">
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn> -->
+
+      <v-menu offset-y
+        v-if="isLogin">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          icon
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon>
+           mdi-dots-vertical
+          </v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+         @click="$store.dispatch('logout')">    <!-- store안에 actions에 접근할려면 dispatch()함수를 써야 접근이 됨. -->
+          <v-list-item-title> Log Out </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     </v-app-bar>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
     props: {
       source: String,
@@ -65,6 +95,9 @@ export default {
     data: () => ({
       drawer: null,
     }),
+    computed : {
+        ...mapState(["isLogin"])
+    },
 }
 </script>
 

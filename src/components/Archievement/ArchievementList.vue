@@ -207,6 +207,7 @@ data: () => ({
             console.log('분류 : ',this.select + " / " + '검색 : ', this.searchText)
         },
 
+        // 글 작성
         register(){
           this.$router.push(
             {

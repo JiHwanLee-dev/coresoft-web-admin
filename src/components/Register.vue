@@ -22,11 +22,40 @@
           v-else-if="subject === 'archievement'"> 국내외 개발실적 
           </h2>
 
-
+           <h2
+          v-else-if="subject === 'companyHistory'"> 회사 연혁 
+          </h2>
 
           <br>
           <hr>
           <br>
+            <v-row
+            v-if="subject === 'archievement' || subject === 'companyHistory'">
+                <v-col
+                    class="d-flex"
+                    cols="12"
+                    sm="6"
+                >
+                    <v-select
+                    :items="this.year"
+                    label="년"
+                    v-model="boardInfo.select_year"
+                    ></v-select>
+                </v-col>
+
+                 <v-col
+                    class="d-flex"
+                    cols="12"
+                    sm="6"
+                >
+                    <v-select
+                    :items="this.month"
+                    label="월"
+                    v-model="boardInfo.select_month"
+                    ></v-select>
+                </v-col>
+
+            </v-row>
               <v-col 
               sm="8"
               cols="12" >
@@ -126,17 +155,22 @@ export default {
             //subject : null,
             //title : null,
             //content : null,
+           
             
             // 디비에 보내는 객체
             boardInfo : {
                 subject : null,
                 title : null,
                 content : null,
-                use_yn : 'N',
+                use_yn : 'N',              // 테스트로 N 
                 userId : null,
                 rgst_dt : null,
                 rgst_tm : null,
-                hit : 0
+                hit : 0,
+                select_year : null,   // year 과 month 는 국내외 개발실적, 회사 연혁 테이블 칼럼에 있어서 추가
+                select_month : null,
+                       
+                
             }
         }
     },
@@ -164,7 +198,9 @@ export default {
 
     computed : {
         ...mapState(["userInfo"]),
-        ...mapState(["isLogin"])
+        ...mapState(["isLogin"]),
+        ...mapState(["year"]),
+        ...mapState(["month"]),
 
 
     },
@@ -178,7 +214,7 @@ export default {
         // 글 등록
         async getRegister(){
             //console.log('title : ', this.boardInfo.title, '  content : ', this.boardInfo.content, '  subject : ', this.boardInfo.subject)
-            
+
             var dt = new Date();
 
             var year = dt.getFullYear();
@@ -226,8 +262,11 @@ export default {
 
             this.boardInfo.rgst_dt = rgst_dt;
             this.boardInfo.rgst_tm = rgst_tm;
-            
-            
+
+
+            console.log('select_year : ', this.boardInfo.select_year)
+            console.log('select_month : ', this.boardInfo.select_month)
+         
             console.log('boardInfo : ', this.boardInfo)
             
             // 문자열로 변환해서 서버에 보내줌.
@@ -237,21 +276,22 @@ export default {
             const noticeData = await axios.get(`http://localhost:4000/register/${boardInfos}`)
             .then(res => {
                 console.log('res_register_status : ', res)
+                console.log('res_register_status : ', res.data)
 
                 // 글작성이 완료 되었으므로, 목록화면으로 가야 됨
-                if(res === 'notice'){
+                if(res.data === 'notice'){
                     this.$router.push(
                         {
                             name : 'Notice'
                         }
                     )
-                }else if(res === 'archievement'){
+                }else if(res.data === 'archievement'){
                     this.$router.push(
                         {
                             name : 'Archievement'
                         }
                     )
-                }else if(res === 'companyHistory'){
+                }else if(res.data === 'companyHistory'){
                     this.$router.push(
                         {
                             name : 'CompanyHistory'

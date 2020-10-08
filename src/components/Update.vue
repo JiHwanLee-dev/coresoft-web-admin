@@ -18,9 +18,40 @@
           <h2
           v-else-if="subject === 'archievement'"> 국내외 개발실적 
           </h2>
+
+          <h2
+          v-else-if="subject === 'companyHistory'"> 회사 연혁
+          </h2>
           <br>
           <hr>
           <br>
+           <v-row
+            v-if="subject === 'archievement' || subject === 'companyHistory'">
+                <v-col
+                    class="d-flex"
+                    cols="12"
+                    sm="6"
+                >
+                    <v-select
+                    :items="this.year"
+                    label="년"
+                    v-model="boardInfo.year"
+                    ></v-select>
+                </v-col>
+
+                 <v-col
+                    class="d-flex"
+                    cols="12"
+                    sm="6"
+                >
+                    <v-select
+                    :items="this.month"
+                    label="월"
+                    v-model="boardInfo.month"
+                    ></v-select>
+                </v-col>
+
+            </v-row>
               <v-col 
               sm="8"
               cols="12" >
@@ -125,7 +156,9 @@ export default {
           subject : null,
           basicTitle : null,
           basicContent : null,
-          subject : null,
+          basicYear : null,
+          basicMonth : null,
+    
 
           boardInfo : {
                 index : null,
@@ -135,7 +168,9 @@ export default {
                 userId : null,
                 mdfy_dt : null,
                 mdfy_tm : null,
-                hit : 0
+                hit : 0,
+                year : null,
+                month : null,
             }
       }
   },
@@ -149,6 +184,9 @@ export default {
         this.boardInfo.title = this.$route.params.title
         this.boardInfo.content = this.$route.params.content
         this.boardInfo.index = this.$route.params.index
+        this.boardInfo.year = this.$route.params.year
+        this.boardInfo.month = this.$route.params.month
+       
 
         console.log(this.boardInfo.title)
         console.log(this.boardInfo.content)
@@ -194,23 +232,12 @@ export default {
             if(seconds.toString().length < 2){
                 seconds = "0" + seconds;
             }
-
-            console.log('today : ', dt)
-            console.log('year : ', year)
-            console.log('month : ', month)
-            console.log('date : ', date)
-            console.log('hours : ', hours)
-            console.log('minutes : ', minutes)
-            console.log('seconds : ', seconds)
-
             const mdfy_dt = year + '' + month + '' + date;
             const mdfy_tm = hours + '' + minutes + '' + seconds;
 
-            console.log('rgst_dt : ', mdfy_dt)
-            console.log('rgst_tm : ', mdfy_tm)
-
             this.boardInfo.mdfy_dt = mdfy_dt;
             this.boardInfo.mdfy_tm = mdfy_tm;
+
 
             
         console.log('info : ', this.boardInfo)
@@ -238,6 +265,12 @@ export default {
                             name : 'Archievement'
                         }
                     )
+                }else if(res.data === 'companyHistory'){
+                    this.$router.push(
+                        {
+                            name : 'CompanyHistory'
+                        }
+                    )
                 }
             }).catch(err => {
                 console.log('err : ', err)
@@ -251,10 +284,13 @@ export default {
 
   computed : {
         ...mapState(["userInfo"]),
+        ...mapState(["year"]),
+        ...mapState(["month"]),
     },
 
 
 }
+
 </script>
 
 <style>
