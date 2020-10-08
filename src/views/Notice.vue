@@ -4,24 +4,20 @@
     
     <v-main>
       <v-container>
-          <NoticeList/>
+        <NoticeList/>
       </v-container>
-
-      <!-- {{ isLogin }} -->
     </v-main>
     
     <v-footer
       color="indigo"
       app
     >
+  
     <Footer/>
       
     </v-footer>
   </v-app>
 
-
-
- 
 </template>
 
 <script>

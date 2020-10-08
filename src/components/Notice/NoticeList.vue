@@ -1,6 +1,6 @@
 <template>
-  <div
-  style="text-align: center;">
+
+  <div>
 
     <v-data-table
     :headers="headers"
@@ -16,7 +16,7 @@
     @page-count="pageCount = $event"
     @click:row="click"
   >
-    ads
+ 
     <template v-slot:top>
       <v-toolbar flat color="white"
       style="margin-bottom:30px;">

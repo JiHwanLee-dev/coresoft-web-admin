@@ -11,9 +11,6 @@
           column
           align-center
         >   
-        <!-- style="padding-right: 190px; padding-left: 190px; padding-top: 80px" -->
-        <!-- vuex userInfo : {{ userInfo }}
-        login : {{ isLogin }} -->
           <h2
           v-if="subject === 'notice'"> 공지사항 
           </h2>

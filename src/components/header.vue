@@ -54,12 +54,8 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>CoreSoft</v-toolbar-title>
       <v-spacer></v-spacer>
-     
-      <!-- <v-btn icon
-      v-if="isLogin">
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn> -->
-
+    
+      <!-- 로그인이 되어 있으면 로그아웃 버튼 생성 -->
       <v-menu offset-y
         v-if="isLogin">
       <template v-slot:activator="{ on, attrs }">
