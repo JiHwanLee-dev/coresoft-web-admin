@@ -172,8 +172,8 @@ export default {
         }
     },
 
-    created(){
-        console.log(this.$route.params.subject)
+    async created(){
+        console.log('params.subject : ',this.$route.params.subject)
         console.log(this.year)
 
         this.subject = this.$route.params.subject

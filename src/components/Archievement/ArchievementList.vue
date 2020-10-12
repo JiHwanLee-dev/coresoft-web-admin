@@ -42,16 +42,6 @@
 
             </v-col>
 
-                <!-- <v-btn
-                style="margin-top:40px;"
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    @click="btnSearchMenu"
-                    
-                >검색</v-btn> -->
-            
-                
             </v-toolbar>
             </template>
         </v-data-table>
@@ -110,49 +100,14 @@ data: () => ({
     
     select : null,
     searchText : null,
-    test : [
-        {sub : 'aa',
-        cont : 'bb'},
-        {sub : 'cc',
-        cont : 'dd'}
-    ],
-    adas :null
+   
+   
     }),
 
     computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
-
-      
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
     },
 
   async created(){
-
-    console.log(this.data)
-    
-    /*
-    const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/archievements?p=1&rpp=87&t&q')  // 국내외 개발실적 전체보기
-    .then(res => {
-      console.log('res : ', res)
-      console.log(res.data.message)
-      this.msg = res.data.message
-      this.data2 = res.data.items
-      console.log(res.data.items)
-      console.log(res.data.title)
-      this.desserts = res.data.items
-      console.log('desserts : ', this.desserts);
-    })
-    .catch(err => {
-      console.log('err : ', err)
-    })
-    */
 
      // 서버통신으로 notice데이터를 불러옴
      const noticeData = await axios.get('http://localhost:4000/archievement')
@@ -195,16 +150,8 @@ data: () => ({
               }
             }
           )
-
-
-
           console.log(value.indexOf)
-           //alert(value)
-        },
-
-        // 분류에 검색 후 검색버튼 클릭 시 이벤트
-        btnSearchMenu() {
-            console.log('분류 : ',this.select + " / " + '검색 : ', this.searchText)
+        
         },
 
         // 글 작성

@@ -31,7 +31,6 @@
               cols="12" 
               sm="8"
               >
-
               <v-textarea
                 outlined
                 name="input-7-4"

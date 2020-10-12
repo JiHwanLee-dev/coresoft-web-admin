@@ -88,20 +88,9 @@ data: () => ({
       ],
       desserts: [],
       editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
+
+   
+ 
       searchText : null,
 
      page: 1,
@@ -144,7 +133,6 @@ data: () => ({
             console.log("value : " + value[key])
           }
 
-
           console.log(value.idx)
 
           var idx = value.idx
@@ -157,14 +145,6 @@ data: () => ({
               }
             }
           )
-
-
-           //alert(value)
-        },
-
-        // 분류에 검색 후 검색버튼 클릭 시 이벤트
-        btnSearchMenu() {
-            console.log('분류 : ',this.select + " / " + '검색 : ', this.searchText)
         },
 
         // 글 작성

@@ -107,29 +107,12 @@ data: () => ({
       ],
       desserts: [],
       editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
+   
       searchText : null,
 
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
-    
-      searchMenu: [
-            '제목', '글쓴이'
-     ]
     }),
 
     computed: {
@@ -146,33 +129,6 @@ data: () => ({
     
 
     async created(){ 
-    //console.log(this.data)
-
-
-      /*
-
-      // 공지사항 API를 불러옴
-      const data2 = await axios.get('http://api.coresoft.co.kr/api/v1/notice?p=1&rpp=18&t&q') // 공지사항 전체 목록
-      .then(res => {
-        console.log('res : ', res)
-      
-        this.data2 = res.data.items
-        console.log(res.data.items)
-        console.log(res.data.title)
-
-        this.desserts = res.data.items
-        console.log('desserts : ', this.desserts);
-      })
-      .catch(err => {
-        console.log('err : ', err)
-      })
-
-      */
-
-    
-    //console.log('aa: ' , localStorage)
-
-    //console.log('aa:dada ')
 
      // 서버통신으로 notice데이터를 불러옴
      const noticeData = await axios.get('http://localhost:4000/notice')

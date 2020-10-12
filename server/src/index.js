@@ -1,4 +1,8 @@
 
+/* cmd에서 node/serve/src index 명령어로 express서버 실행 */
+
+
+
 
 const config = require('./DBConfig');
 const sql = require('mssql');
@@ -18,8 +22,6 @@ app.use(cors());
 app.get('/notice', (req, res) => {
   getNoticeList(res, req);
 })
-
-// 공지사항 전체 불러오는 함수
 async function getNoticeList(res,req){
   try {
     let pool = await sql.connect(config)
@@ -37,7 +39,7 @@ async function getNoticeList(res,req){
 
 
 
-// 공지사항 특정 데이터 보기
+// 공지사항 상세정보 보기
 app.get('/notice/noticeDetail/:index', (req, res) => {
   console.log('req : ', req.params)
 
@@ -45,7 +47,6 @@ app.get('/notice/noticeDetail/:index', (req, res) => {
   getNoticeDetail(res, req, index);
 })
 
-// 공지사항 상세보기
 async function getNoticeDetail(res, req, index){
   try {
   
@@ -78,7 +79,6 @@ app.get('/archievement', (req, res) => {
   getArchievement(res, req);
 })
 
-// 국내외 개발실적 전체 불러오는 함수
 async function getArchievement(res,req){
   try {
     let pool = await sql.connect(config)
@@ -97,7 +97,7 @@ async function getArchievement(res,req){
 
 
 
-// 국내외 개발실적 특정 데이터 보기
+// 국내외 개발실적 상세정보 보기
 app.get('/archievement/archievementDetail/:index', (req, res) => {
   console.log('req : ', req.params)
 
@@ -105,7 +105,6 @@ app.get('/archievement/archievementDetail/:index', (req, res) => {
   getArchievementDetail(res, req, index);
 })
 
-// 국내외 개발실적 상세보기
 async function getArchievementDetail(res, req, index){
   try {
   
@@ -132,7 +131,6 @@ app.get('/companyHistory', (req, res) => {
 
 })
 
-// 회사 연혁 전체 불러오는 함수
 async function getCompanyHistory(res,req){
   try {
     let pool = await sql.connect(config)
@@ -150,7 +148,7 @@ async function getCompanyHistory(res,req){
 
 
 
-// 회사 연혁 특정 데이터 보기
+// 회사 연혁 상세정보 보기
 app.get('/companyHistory/companyHistoryDetail/:index', (req, res) => {
   console.log('req : ', req.params)
 
@@ -158,7 +156,6 @@ app.get('/companyHistory/companyHistoryDetail/:index', (req, res) => {
   getCompanyHistoryDetail(res, req, index);
 })
 
-// 회사 연혁 상세보기
 async function getCompanyHistoryDetail(res, req, index){
   try {
   
@@ -338,19 +335,10 @@ app.post('/login_process/:info', (req, res) => {
   loginProcess(res, email, password);
 })
 
-
-
-
-
-
-// 로그인 체크
 async function loginProcess(res, email, password){
   try {
     console.log('email2 : ', email)
     console.log('password2 : ', password)
-
-    var query = `SELECT * FROM TB_ADMIN_USER WHERE admin_id = '${email}'
-    AND pwd = '${password}'`;
 
     console.log('query : ', query)
 
@@ -386,7 +374,7 @@ async function loginProcess(res, email, password){
 
 
 
-
+// 데이터베이스 연결 에러
 sql.on('error', err => {
   // ... error handler
   console.log('err is ', err)
