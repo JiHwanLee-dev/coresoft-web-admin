@@ -177,6 +177,51 @@ async function getCompanyHistoryDetail(res, req, index){
 
 
 
+// 공지사항, 국내외 개발실적, 회사 연혁 상세정보 보기
+app.get('/detail/:index', (req, res) => {
+  console.log('req : ', req.params)
+
+  const index = JSON.parse(req.params.index)
+  console.log('index : ', index)
+
+  getDetail(res, req, index);
+})
+
+async function getDetail(res, req, index){
+  try {
+  
+    let pool = await sql.connect(config)
+    let result1 = ''
+    if(index.subject == 'notice'){
+      console.log('notice')
+      result1 = await pool.request()
+        .query(`SELECT * FROM TB_NOTICE WHERE idx = ${index.index}`)
+
+    }else if(index.subject == 'archievement'){
+      console.log('archievement')
+      result1 = await pool.request()
+        .query(`SELECT * FROM TB_BUSINESS_ARCHIEVEMENTS WHERE idx = ${index.index}`)
+
+    }else if(index.subject == 'companyHistory'){
+      console.log('companyHistory')
+      result1 = await pool.request()
+        .query(`SELECT * FROM TB_COMPANY_HISTORY WHERE idx = ${index.index}`)
+    }
+
+    res.send(result1)   // 클라이언트에 결과값 보냄
+
+  } catch (err) {
+      // ... error checks
+      console.log('err is ', err)
+  }
+}
+
+
+
+
+
+
+
 
 // 공지사항, 국내외 개발실적, 회사 연혁 글 등록
 app.get('/register/:index', (req, res) => {

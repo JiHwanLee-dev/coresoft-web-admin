@@ -4,7 +4,9 @@
     
     <v-main>
       <v-container>
-        <NoticeList/>
+        <!-- <NoticeList/> -->
+        <BoardList
+          :propsdata="subject"/>
       </v-container>
     </v-main>
     
@@ -22,9 +24,10 @@
 
 <script>
 /* eslint-disable */
-import Header from "../components/header.vue";
-import Footer from "../components/footer.vue";
-import NoticeList from "../components/Notice/NoticeList.vue";
+// @/ => src경로부터 시작
+import Header from "@/components/header.vue";
+import Footer from "@/components/footer.vue";
+import NoticeList from "@/components/Notice/NoticeList.vue";
 import { mapState } from 'vuex';
 
 export default {
@@ -45,6 +48,7 @@ export default {
     data(){
       return {
         ///testData : null  
+        subject : "notice"
       }
     },
 

@@ -1,11 +1,7 @@
 <template>
 
  <v-app id="inspire">
-        <Header/>
   
-    
-      <v-container 
-        fluid>
         <!-- column 수직 -->
         <v-layout 
           column
@@ -98,41 +94,9 @@
               </v-row>
               </v-layout>        
             </v-col>
-
-          <!-- <v-col cols="12">
-            <v-text-field
-              value="John Doe"
-              label="제목"
-              outlined
-              readonly
-            ></v-text-field>
-          </v-col> -->
-
         </v-layout>
-      
-      </v-container>
 
-   
-
-    <v-footer
-      color="indigo"
-      app
-    >
-    <Footer/>
-      
-    </v-footer>
   </v-app>
-
-   <!-- <v-main>
-      <v-container>
-         <h1> DevResultDetails </h1>
-      {{ getParams }}
-      </v-container>
-
-    </v-main> -->
-
-
-  
 </template>
 
 <script>
@@ -146,6 +110,8 @@ export default {
         Header,
         Footer,
     },
+
+    props : ['propsdata'],
 
     data(){
         return {
@@ -174,12 +140,13 @@ export default {
 
     async created(){
         console.log('params.subject : ',this.$route.params.subject)
-        console.log(this.year)
+        console.log('year : ', this.year)
 
-        this.subject = this.$route.params.subject
+        this.subject = this.propsdata
         this.boardInfo.subject = this.subject
         this.boardInfo.userId = this.userInfo[0].admin_id
 
+        console.log('props : ', this.propsdata)
         console.log('userInfo : ',this.boardInfo)
     },
 

@@ -32,6 +32,15 @@
             <v-list-item-title>회사 연혁</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link
+         router :to="{name : 'Test', params : {idx : '123'}}" exact>
+          <v-list-item-action>
+            <v-icon>mdi-note</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Test</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       
     </v-navigation-drawer>

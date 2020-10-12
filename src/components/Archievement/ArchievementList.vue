@@ -23,15 +23,6 @@
                 ></v-divider>
                 <v-spacer></v-spacer>
 
-            <!-- <v-col class="d-flex" cols="6" sm="2"
-            style="margin-top:40px;">
-                <v-select
-                :items="searchMenu"
-                label="분류"
-                v-model="select"
-                ></v-select>
-            </v-col> -->
-
             <v-col sm="6" cols="2"
             style="margin-top:40px;">
                 <v-text-field

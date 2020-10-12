@@ -29,19 +29,30 @@ const routes = [
     path: "/notice",
     name: "Notice",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Notice.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/notice/Notice.vue")
+      // ,
+      // children:[
+      //   {
+      //     path: "noticeDetail",
+      //     name: "NoticeDetail",
+      //     component: () =>
+      //       import(/* webpackChunkName: "about" */ "../components/Notice/NoticeDetail.vue")
+      //   }
+      // ]
   },
+
   {
-    path: "/notice/noticeDetail",
+    path: "/noticeDetail",
     name: "NoticeDetail",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../components/Notice/NoticeDetail.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/notice/NoticeDetail.vue")
   },
+
   {
     path: "/companyHistory",
     name: "CompanyHistory",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/CompanyHistory.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/companyhistory/CompanyHistory.vue")
   },
   {
     path: "/archievement",
@@ -52,8 +63,8 @@ const routes = [
       // ,
       // children:[
       //   {
-      //     path: "/devResult/devResultDetail",
-      //     name: "DevResultDetail",
+      //     path: "/archievement/Archievement",
+      //     name: "ArchievementDetail",
       //     component: () =>
       //       import(/* webpackChunkName: "about" */ "../components/DevResult/DevResultDetail.vue")
       //   }
@@ -73,12 +84,19 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../components/CompanyHistory/CompanyHistoryDetail.vue")
   },
+  // {
+  //   path: "/register",
+  //   name: "Register",
+  //   beforeEnter : OnlyAuthUser,
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../components/Register.vue")
+  // },
   {
     path: "/register",
-    name: "Register",
+    name: "NoticeRegister",
     beforeEnter : OnlyAuthUser,
     component: () =>
-      import(/* webpackChunkName: "about" */ "../components/Register.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/notice/NoticeRegister.vue")
   },
   {
     path: "/update",
@@ -86,6 +104,13 @@ const routes = [
     beforeEnter : OnlyAuthUser,
     component: () =>
       import(/* webpackChunkName: "about" */ "../components/Update.vue")
+  },
+  {
+    path: "/test",
+    name: "Test",
+    beforeEnter : OnlyAuthUser,
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/TEST.vue")
   }
 ]
 
