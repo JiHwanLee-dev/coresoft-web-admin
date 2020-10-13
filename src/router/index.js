@@ -3,6 +3,7 @@ import VueRouter from "vue-router"
 // import Home from "../views/Home.vue";
 import Main from "../views/Main.vue"
 import store from "../store"
+import BoardDetail from "../views/boards/BoardDetail.vue"
 
 
 Vue.use(VueRouter)
@@ -29,7 +30,10 @@ const routes = [
     path: "/notice",
     name: "Notice",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/boards/notice/Notice.vue")
+      // import(/* webpackChunkName: "about" */ "../views/boards/notice/Notice.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/kinds/NoticeList.vue")
+
+
       // ,
       // children:[
       //   {
@@ -41,24 +45,19 @@ const routes = [
       // ]
   },
 
-  {
-    path: "/noticeDetail",
-    name: "NoticeDetail",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/boards/notice/NoticeDetail.vue")
-  },
-
+  
   {
     path: "/companyHistory",
     name: "CompanyHistory",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/boards/companyhistory/CompanyHistory.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/kinds/CompanyHistoryList.vue")
   },
   {
     path: "/archievement",
     name: "Archievement",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Archievement.vue")
+      //import(/* webpackChunkName: "about" */ "../views/Archievement.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/kinds/ArchievementList.vue")
       
       // ,
       // children:[
@@ -70,20 +69,52 @@ const routes = [
       //   }
       // ]
     
-  }
-  ,
+  },
+
+
+
+
+
+
+
   {
-    path: "/archievement/archievementDetail",
+    path: "/noticeDetail",
+    name: "NoticeDetail",
+    component : BoardDetail
+     
+  },
+
+  {
+    path: "/archievementDetail",
     name: "ArchievementDetail",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../components/Archievement/ArchievementDetail.vue")
+    component : BoardDetail
   },
+
   {
-    path: "/companyHistory/companyHistoryDetail",
+    path: "/companyHistoryDetail",
     name: "CompanyHistoryDetail",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../components/CompanyHistory/CompanyHistoryDetail.vue")
+    component : BoardDetail
   },
+
+
+
+
+
+
+  // {
+  //   path: "/archievement/archievementDetail",
+  //   name: "ArchievementDetail",
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../components/Archievement/ArchievementDetail.vue")
+  // },
+  // {
+  //   path: "/companyHistory/companyHistoryDetail",
+  //   name: "CompanyHistoryDetail",
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../components/CompanyHistory/CompanyHistoryDetail.vue")
+  // },
+
+
   // {
   //   path: "/register",
   //   name: "Register",
@@ -92,19 +123,37 @@ const routes = [
   //     import(/* webpackChunkName: "about" */ "../components/Register.vue")
   // },
   {
-    path: "/register",
+    path: "/notice/register",
     name: "NoticeRegister",
     beforeEnter : OnlyAuthUser,
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/boards/notice/NoticeRegister.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/BoardRegister.vue")
   },
+
+  {
+    path: "/archievement/register",
+    name: "ArchievementRegister",
+    beforeEnter : OnlyAuthUser,
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/boards/BoardRegister.vue")
+  },
+
+  {
+    path: "/companyHistory/register",
+    name: "CompanyHistoryRegister",
+    beforeEnter : OnlyAuthUser,
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/boards/BoardRegister.vue")
+  },
+
   {
     path: "/update",
     name: "Update",
     beforeEnter : OnlyAuthUser,
     component: () =>
-      import(/* webpackChunkName: "about" */ "../components/Update.vue")
+      import(/* webpackChunkName: "about" */ "../views/boards/BoardUpdate.vue")
   },
+
   {
     path: "/test",
     name: "Test",

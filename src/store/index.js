@@ -19,7 +19,10 @@ export default new Vuex.Store({
     ],
     month : [
       '01','02','03','04','05','06','07','08','09','10','11','12'
-    ]
+    ],
+    boardName : null,
+    boardCurrentPageNum : 0,
+
   },
   mutations: {
     // 로그인이 성공했을 때
@@ -40,8 +43,19 @@ export default new Vuex.Store({
       state.isLogin = false
       state.isLoginError = false
       state.userInfo = null
+    },
+
+    // 현재 유저가 보고있는 게시판 이름
+    currentBoardName(state, payload){
+      state.boardName = payload
+    },
+
+    // 현재 게시판 페이지 번호
+    currentBoardPageNum(state, payload){
+      state.boardCurrentPageNum = payload
     }
   },
+
   actions: {},
   modules: {}
 });

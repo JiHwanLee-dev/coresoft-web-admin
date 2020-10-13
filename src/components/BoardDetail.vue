@@ -85,6 +85,7 @@ import Header from "@/components/header.vue";
 import Footer from "@/components/footer.vue";
 import axios from "axios";
 import { mapState } from 'vuex';
+import { pageNumEventBus } from '@/main.js';
 
 export default {
   components : {
@@ -96,8 +97,6 @@ export default {
 
   data() {
     return {
-
-        
       setIndex : '',
       title : '',
       content : '',
@@ -105,9 +104,14 @@ export default {
       year : null,
       month : null,
 
+
       boardInfo : {
         index : null,
         subject : null,
+        title : this.title,
+        content : this.content,
+        writer : this.writer,
+        use_yn : 'N',
       }
     }
   },
@@ -117,17 +121,19 @@ export default {
       //setIndex = this.$route.query.index;
       return this.$route.query.index
     },
+      ...mapState(["boardName"]),
       ...mapState(["userInfo"]),
 
   },
 
   async created(){
     
-    console.log(this.propsdata);
+    console.log('propsdata : ',this.propsdata);
 
     this.subject = this.propsdata
     this.boardInfo.subject = this.subject
     this.boardInfo.index = this.$route.query.index;
+    this.boardInfo.userId = this.userInfo[0].admin_id
 
     // 문자열로 변환해서 서버에 보내줌.
     const boardInfos = JSON.stringify(this.boardInfo)
@@ -138,7 +144,7 @@ export default {
        //index : this.$route.query.index
      })
       .then(res => {
-          console.log('res_notice_detail_datas : ', res)
+          console.log(`res_${this.subject}_detail_datas : `, res)
           //console.log('items : ', res.data.recordset)
           //this.desserts = res.data.recordset;
           console.log(res.data.recordset[0].title)
@@ -150,24 +156,46 @@ export default {
       }).catch(err => {
           console.log('err : ', err)
       })
+    
+    pageNumEventBus.$on('getPageNumEventBus', (date) => {
+        console.log('currentBuss : ', date)
+    })
 
+
+
+
+
+    // 페이지 뒤로가기 클릭 시, 처음 페이지로 리로드가 되는게 아니라, 현재 페이지 번호를 토대로 리로드가 되어야 됨.
+    // ex. 2페이지의 상세화면 들어갔을 시, 뒤로가기 클릭 했을 때, 1페이지 부터 리로드가 된다. 고로, 2페이지부터 리로드가 되게 할려면, 페이지 넘버2 를 넘겨줘야 됨.
+     window.onpopstate = function(event){
+        //alert('뒤로가기')
+        //pageNumEventBus.$emit('currentPageNum', 2);
+        //this.$router.go(-1)
+    }
 
     
   },
 
   mounted(){
     window.scrollTo(0,0)  // 스크롤 위치 최상단으로 
+
+    //  window.onpopstate = function(event){
+    //     alert('뒤로가기')
+    // }
   },
 
   methods : {
     // 목록으로 돌아가기
     getList(){
       console.log('index : ', this.$route.query.index)
-      this.$router.push(
-        {
-          name : 'CompanyHistory'
-        }
-      )
+
+       this.$router.back()
+
+    //   this.$router.push(
+    //     {
+    //       name : 'CompanyHistory'
+    //     }
+    //   )
     },
 
     update() {
@@ -175,7 +203,7 @@ export default {
         {
           name : 'Update',
           params : {
-            subject : 'companyHistory',
+            subject : this.subject,
             title : this.title,
             content : this.content,
             writer : this.writer,
@@ -231,6 +259,7 @@ export default {
         // 서버통신으로 notice 특정 데이터를 불러옴
         //console.log('index : ', this.$route.query.index);
 
+        console.log(this.boardInfo)
         // 문자열로 변환해서 서버에 보내줌.
         const boardInfos = JSON.stringify(this.boardInfo)
 

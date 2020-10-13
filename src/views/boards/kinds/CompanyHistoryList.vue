@@ -4,7 +4,6 @@
     
     <v-main>
       <v-container>
-        <!-- <NoticeList/> -->
         <BoardList
           :propsdata="subject"/>
       </v-container>
@@ -27,14 +26,12 @@
 // @/ => src경로부터 시작
 import Header from "@/components/header.vue";
 import Footer from "@/components/footer.vue";
-import NoticeList from "@/components/Notice/NoticeList.vue";
 import { mapState } from 'vuex';
 
 export default {
     components : {
         Header,
         Footer,
-        NoticeList
     },
 
     props : {
@@ -43,12 +40,13 @@ export default {
 
     created(){
       console.log('Notice_Created')
+      this.$store.commit('currentBoardName', this.subject)
     },
 
     data(){
       return {
         ///testData : null  
-        subject : "notice"
+        subject : "companyHistory"
       }
     },
 

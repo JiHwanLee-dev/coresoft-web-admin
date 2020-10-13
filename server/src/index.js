@@ -197,6 +197,8 @@ async function getDetail(res, req, index){
       result1 = await pool.request()
         .query(`SELECT * FROM TB_NOTICE WHERE idx = ${index.index}`)
 
+        // 조회수 증가 쿼리 해야 됨.
+
     }else if(index.subject == 'archievement'){
       console.log('archievement')
       result1 = await pool.request()
@@ -267,7 +269,7 @@ async function getRegister(res, req, index){
 // 공지사항, 국내외 개발실적, 회사 연혁 글 수정
 app.get('/update/:index', (req, res) => {
   const index = JSON.parse(req.params.index)
-  console.log('index : ', index)
+  console.log('update_index : ', index)
 
   getUpdate(res, req, index);
 })
@@ -384,8 +386,6 @@ async function loginProcess(res, email, password){
   try {
     console.log('email2 : ', email)
     console.log('password2 : ', password)
-
-    console.log('query : ', query)
 
     let pool = await sql.connect(config)
     let result1 = await pool.request()

@@ -7,20 +7,16 @@
       <v-container 
         fluid>
         <!-- column 수직 -->
-
-        <BoardRegister
+        <BoardDetail
             :propsdata="subject"/>
-
       </v-container>
-
-   
 
     <v-footer
       color="indigo"
       app
     >
     <Footer/>
-    
+      
     </v-footer>
   </v-app>
 </template>
@@ -36,27 +32,27 @@ export default {
         Footer,
     },
 
-    data(){
-        return { 
-             subject : "notice",
-        }
-    },
+  data() {
+    return {
+      subject : ''
+    }
+  },
 
-    async created(){
-      
-    },
+  async created(){
+      console.log('NoticeDetail_created')
+      console.log('query : ', this.$route.query.index)
+      this.subject = this.$store.state.boardName
+      console.log('subject : ', this.subject)
+  },
 
-        
-    mounted(){
-        window.scrollTo(0,0)  // 스크롤 위치 최상단으로 
-        //console.log(this.$route.params.title)
-        window.onpopstate = function(event){
-        //alert('뒤로가기')
-        }
+  mounted(){
+    window.scrollTo(0,0)  // 스크롤 위치 최상단으로 
+    
 
-    },
-
-  
+    window.onpopstate = function(event){
+      //alert('뒤로가기')
+    }
+  },
 
 
 }

@@ -13,8 +13,6 @@
 
       </v-container>
 
-   
-
     <v-footer
       color="indigo"
       app
@@ -29,7 +27,6 @@
 import Header from "@/components/header.vue";
 import Footer from "@/components/footer.vue";
 
-
 export default {
   components : {
         Header,
@@ -38,12 +35,13 @@ export default {
 
     data(){
         return { 
-             subject : "companyHistory",
+             subject : "",
         }
     },
 
     async created(){
-      
+       this.subject = this.$store.state.boardName
+       console.log('subject : ', this.subject)
     },
 
         

@@ -1,29 +1,27 @@
 <template>
 
- <v-app id="inspire">
-  
         <!-- column 수직 -->
         <v-layout 
           column
           align-center
         >   
           <h2
-          v-if="subject === 'notice'"> 공지사항 
+          v-if="this.propsdata === 'notice'"> 공지사항 
           </h2>
 
           <h2
-          v-else-if="subject === 'archievement'"> 국내외 개발실적 
+          v-else-if="this.propsdata === 'archievement'"> 국내외 개발실적 
           </h2>
 
            <h2
-          v-else-if="subject === 'companyHistory'"> 회사 연혁 
+          v-else-if="this.propsdata === 'companyHistory'"> 회사 연혁 
           </h2>
 
           <br>
           <hr>
-          <br>
+          
             <v-row
-            v-if="subject === 'archievement' || subject === 'companyHistory'">
+            v-if="this.propsdata === 'archievement' || this.propsdata === 'companyHistory'">
                 <v-col
                     class="d-flex"
                     cols="12"
@@ -47,8 +45,9 @@
                     v-model="boardInfo.select_month"
                     ></v-select>
                 </v-col>
-
+              
             </v-row>
+
               <v-col 
               sm="8"
               cols="12" >
@@ -96,7 +95,7 @@
             </v-col>
         </v-layout>
 
-  </v-app>
+
 </template>
 
 <script>
@@ -141,6 +140,7 @@ export default {
     async created(){
         console.log('params.subject : ',this.$route.params.subject)
         console.log('year : ', this.year)
+        console.log('boardName : ', this.boardName)
 
         this.subject = this.propsdata
         this.boardInfo.subject = this.subject
@@ -166,6 +166,7 @@ export default {
         ...mapState(["isLogin"]),
         ...mapState(["years"]),
         ...mapState(["month"]),
+        ...mapState(["boardName"]),
 
 
     },

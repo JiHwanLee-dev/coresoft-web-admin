@@ -82,23 +82,15 @@
 <script>
 /* eslint-disable */
 import axios from 'axios'
+import { mapState } from 'vuex';
+import { pageNumEventBus } from '@/main.js';
+
 
 export default {
     props : ['propsdata'],
     data: () => ({
         dialog: false,
-        headers: [
-            {
-            text: '번호',
-            align: 'start',
-            sortable: false,
-            value: 'idx',
-            },
-            { text: '제목', sortable: false, value: 'title' },
-            { text: '조회수',  sortable: false, value: 'hit' },
-            { text: '등록일',  sortable: false, value: 'rgst_dt' },
-        
-        ],
+        headers: [],
         desserts: [],
         editedIndex: -1,
     
@@ -118,6 +110,9 @@ export default {
             formTitle () {
                 return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
             },
+
+             ...mapState(["boardName"]),
+             ...mapState(["boardCurrentPageNum"]),
         },
 
         watch: {
@@ -130,16 +125,43 @@ export default {
         async created(){ 
             console.log('propss : ', this.propsdata)
 
-            
+            if(this.propsdata === 'archievement' || this.propsdata === 'companyHistory'){
+                this.headers = [
+                    {
+                    text: '번호',
+                    align: 'start',
+                    sortable: false,
+                    value: 'idx',
+                    },
+                    { text: '개발일자', value: 'date',  sortable: false, align: 'start'},
+                    { text: '제목', value: 'title', sortable: false},
+                    { text: '내용', value: 'content',  sortable: false},
+                ]
+            }else if (this.propsdata === 'notice'){
+                this.headers = [
+                    {
+                    text: '번호',
+                    align: 'start',
+                    sortable: false,
+                    value: 'idx',
+                    },
+                    { text: '제목', sortable: false, value: 'title' },
+                    { text: '조회수',  sortable: false, value: 'hit' },
+                    { text: '등록일',  sortable: false, value: 'rgst_dt' },
+                
+                ]
+            }
+
+
             if(this.propsdata === 'notice'){
                 this.detailName = 'NoticeDetail'    
                 this.registerName = 'NoticeRegister'   
                 this.updateName = 'NoticeUpdate'
-            }else if(this.propsdata === 'archievement'){      
+            }else if(this.propsdata === 'archievement'){
                 this.detailName = 'ArchievementDetail'
                 this.registerName = 'ArchievementRegister'
                 this.updateName = 'ArchievementUpdate'   
-            }else if(this.propsdata === 'companyHistory'){            
+            }else if(this.propsdata === 'companyHistory'){        
                 this.detailName = 'CompanyHistoryDetail'
                 this.registerName = 'CompanyHistoryRegister'
                 this.updateName = 'CompanyHistoryUpdate'   
@@ -148,7 +170,7 @@ export default {
             // 서버통신으로 게시판에 맞는 데이터를 불러옴
             const noticeData = await axios.get(`http://localhost:4000/${this.propsdata}`)
             .then(res => {
-                console.log('res_notice_datas : ', res)
+                console.log(`res_${this.propsdata}_datas : `, res)
                 //console.log('items : ', res.data.recordset)
                 this.desserts = res.data.recordset;
             }).catch(err => {
@@ -174,6 +196,13 @@ export default {
                 var idx = value.idx
                 // var detailName = ''
 
+                 pageNumEventBus.getPageNumEventBus(this.page)
+
+
+                this.$store.commit('currentBoardPageNum', this.page) 
+                console.log('currentPageNum : ', this.boardCurrentPageNum);
+
+
                 // 상세보기
                 this.$router.push(
                      {name : this.detailName,
@@ -186,6 +215,10 @@ export default {
         
             // 글 등록 함수
             register(){
+                // storage에 데이터 저장
+                // this.$store.commit('currentBoardName', this.propsdata)   // store.index.js 파일의 mutations의 loginSuccess함수 호출 , 두번째 인자는 loginSuccess함수에 전달하는 값
+
+                console.log('boardName : ',this.$store.state.boardName)
                 this.$router.push(
                 {
                     name : this.registerName,
