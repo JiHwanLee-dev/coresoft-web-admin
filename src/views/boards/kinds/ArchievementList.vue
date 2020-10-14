@@ -45,18 +45,12 @@ export default {
 
     data(){
       return {
-        ///testData : null  
         subject : "archievement"
       }
     },
 
     computed : {
-      testData(){
-          return this.$store.state
-      },
-
       ...mapState(['isLogin']),
-      ...mapState(['currentBoardName'])
     }
 
    

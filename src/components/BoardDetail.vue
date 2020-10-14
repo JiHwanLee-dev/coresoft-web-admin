@@ -6,17 +6,17 @@
           column
           align-center
         >   
-        <!-- style="padding-right: 190px; padding-left: 190px; padding-top: 80px" -->
+     
           <h2
-          v-if="subject === 'notice'"> 공지사항 
+          v-if="propsdata === 'notice'"> 공지사항 
           </h2>
 
           <h2
-          v-else-if="subject === 'archievement'"> 국내외 개발실적 
+          v-else-if="propsdata === 'archievement'"> 국내외 개발실적 
           </h2>
 
            <h2
-          v-else-if="subject === 'companyHistory'"> 회사 연혁 
+          v-else-if="propsdata === 'companyHistory'"> 회사 연혁 
           </h2>
 
           <br>
@@ -117,21 +117,15 @@ export default {
   },
 
   computed : {
-    getParams(){
-      //setIndex = this.$route.query.index;
-      return this.$route.query.index
-    },
       ...mapState(["boardName"]),
       ...mapState(["userInfo"]),
-
   },
 
   async created(){
     
     console.log('propsdata : ',this.propsdata);
 
-    this.subject = this.propsdata
-    this.boardInfo.subject = this.subject
+    this.boardInfo.subject = this.propsdata
     this.boardInfo.index = this.$route.query.index;
     this.boardInfo.userId = this.userInfo[0].admin_id
 
@@ -157,9 +151,9 @@ export default {
           console.log('err : ', err)
       })
     
-    pageNumEventBus.$on('getPageNumEventBus', (date) => {
-        console.log('currentBuss : ', date)
-    })
+    // pageNumEventBus.$on('getPageNumEventBus', (date) => {
+    //     console.log('currentBuss : ', date)
+    // })
 
 
 

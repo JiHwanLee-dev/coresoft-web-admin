@@ -50,10 +50,10 @@ export default new Vuex.Store({
       state.boardName = payload
     },
 
-    // 현재 게시판 페이지 번호
-    currentBoardPageNum(state, payload){
-      state.boardCurrentPageNum = payload
-    }
+    // 현재 게시판 페이지 번호(일단 보류)
+    // currentBoardPageNum(state, payload){
+    //   state.boardCurrentPageNum = payload
+    // }
   },
 
   actions: {},

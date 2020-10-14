@@ -5,21 +5,21 @@
         >   
         <!-- style="padding-right: 190px; padding-left: 190px; padding-top: 80px" -->
           <h2
-          v-if="subject === 'notice'"> 공지사항 
+          v-if="propsdata === 'notice'"> 공지사항 
           </h2>
 
           <h2
-          v-else-if="subject === 'archievement'"> 국내외 개발실적 
+          v-else-if="propsdata === 'archievement'"> 국내외 개발실적 
           </h2>
 
           <h2
-          v-else-if="subject === 'companyHistory'"> 회사 연혁
+          v-else-if="propsdata === 'companyHistory'"> 회사 연혁
           </h2>
           <br>
           <hr>
           <br>
            <v-row
-            v-if="subject === 'archievement' || subject === 'companyHistory'">
+            v-if="propsdata === 'archievement' || propsdata === 'companyHistory'">
                 <v-col
                     class="d-flex"
                     cols="12"
@@ -160,7 +160,7 @@ export default {
             
             console.log(this.$route.params)
             this.subject = this.propsdata
-            
+
             this.boardInfo.subject = this.subject
             this.boardInfo.title = this.$route.params.title
             this.boardInfo.content = this.$route.params.content

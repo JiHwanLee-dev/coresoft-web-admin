@@ -2,8 +2,6 @@
 /* cmd에서 node/serve/src index 명령어로 express서버 실행 */
 
 
-
-
 const config = require('./DBConfig');
 const sql = require('mssql');
 const express = require('express');
@@ -16,6 +14,40 @@ var qs = require('querystring');
 
 // express의 cors 미들웨어를 통한 cross origin 허용 설정
 app.use(cors());
+
+
+
+
+// // 공지사항 상세정보 보기
+// app.get('/notice/noticeDetail/:index', (req, res) => {
+//   console.log('req : ', req.params)
+
+//   const index = req.params.index
+//   getNoticeDetail(res, req, index);
+// })
+
+// async function getNoticeDetail(res, req, index){
+//   try {
+  
+//     let pool = await sql.connect(config)
+
+
+//     // index에 맞는 공지사항 상세정보
+//     let result1 = await pool.request()
+//         .query(`SELECT * FROM TB_NOTICE WHERE idx = ${index}`)
+
+//     // 조회수 1증가 쿼리
+//     let result2 = await pool.request()
+//         .query(`UPDATE TB_NOTICE SET hit = hit + 1 WHERE idx = ${index}`)
+        
+//     res.send(result1)   // 클라이언트에 결과값 보냄
+
+//   } catch (err) {
+//       console.log('err is ', err)
+//   }
+// }
+
+
 
 
 // 공지사항 전체목록 보기
@@ -39,40 +71,6 @@ async function getNoticeList(res,req){
 
 
 
-// 공지사항 상세정보 보기
-app.get('/notice/noticeDetail/:index', (req, res) => {
-  console.log('req : ', req.params)
-
-  const index = req.params.index
-  getNoticeDetail(res, req, index);
-})
-
-async function getNoticeDetail(res, req, index){
-  try {
-  
-    let pool = await sql.connect(config)
-
-
-    // index에 맞는 공지사항 상세정보
-    let result1 = await pool.request()
-        .query(`SELECT * FROM TB_NOTICE WHERE idx = ${index}`)
-
-    // 조회수 1증가 쿼리
-    let result2 = await pool.request()
-        .query(`UPDATE TB_NOTICE SET hit = hit + 1 WHERE idx = ${index}`)
-        
-    res.send(result1)   // 클라이언트에 결과값 보냄
-
-  } catch (err) {
-      console.log('err is ', err)
-  }
-}
-
-
-
-
-
-
 
 // 국내외 개발실적 전체목록 보기
 app.get('/archievement', (req, res) => {
@@ -92,35 +90,6 @@ async function getArchievement(res,req){
       console.log('err is ', err)
   }
 }
-
-
-
-
-
-// 국내외 개발실적 상세정보 보기
-app.get('/archievement/archievementDetail/:index', (req, res) => {
-  console.log('req : ', req.params)
-
-  const index = req.params.index
-  getArchievementDetail(res, req, index);
-})
-
-async function getArchievementDetail(res, req, index){
-  try {
-  
-    let pool = await sql.connect(config)
-
-    // index에 맞는 국내외 개발실적 상세정보
-    let result1 = await pool.request()
-        .query(`SELECT * FROM TB_BUSINESS_ARCHIEVEMENTS WHERE idx = ${index}`)
-
-    res.send(result1)   // 클라이언트에 결과값 보냄
-
-  } catch (err) {
-      console.log('err is ', err)
-  }
-}
-
 
 
 
@@ -148,30 +117,6 @@ async function getCompanyHistory(res,req){
 
 
 
-// 회사 연혁 상세정보 보기
-app.get('/companyHistory/companyHistoryDetail/:index', (req, res) => {
-  console.log('req : ', req.params)
-
-  const index = req.params.index
-  getCompanyHistoryDetail(res, req, index);
-})
-
-async function getCompanyHistoryDetail(res, req, index){
-  try {
-  
-    let pool = await sql.connect(config)
-
-    // index에 맞는 회사 연혁 상세정보
-    let result1 = await pool.request()
-        .query(`SELECT * FROM TB_COMPANY_HISTORY WHERE idx = ${index}`)
-
-    res.send(result1)   // 클라이언트에 결과값 보냄
-
-  } catch (err) {
-      // ... error checks
-      console.log('err is ', err)
-  }
-}
 
 
 
@@ -186,7 +131,6 @@ app.get('/detail/:index', (req, res) => {
 
   getDetail(res, req, index);
 })
-
 async function getDetail(res, req, index){
   try {
   
@@ -198,6 +142,9 @@ async function getDetail(res, req, index){
         .query(`SELECT * FROM TB_NOTICE WHERE idx = ${index.index}`)
 
         // 조회수 증가 쿼리 해야 됨.
+        // 조회수 1증가 쿼리
+        let result2 = await pool.request()
+        .query(`UPDATE TB_NOTICE SET hit = hit + 1 WHERE idx = ${index.index}`)
 
     }else if(index.subject == 'archievement'){
       console.log('archievement')
