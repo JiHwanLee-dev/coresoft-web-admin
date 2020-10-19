@@ -9,11 +9,15 @@ const app = express();
 var port = 4000;                      // 로컬 4000번 포트 사용. 
 const cors = require('cors');         // express의 cors모듈 로드
 var qs = require('querystring');
+var bodyParder = require('body-parser');
 
 
 
 // express의 cors 미들웨어를 통한 cross origin 허용 설정
 app.use(cors());
+
+app.use(express.json())                                     // 이 코드가 있어야지 body값을 가져올 수 있음.
+
 
 
 
@@ -315,17 +319,19 @@ async function getDelete(res, req, index){
 
 
 // 로그인 정보 확인
-app.post('/login_process/:info', (req, res) => {
-  console.log('req : ' , req.params.info);
+app.post('/login_process', (req, res) => {
+  console.log('req : ' , req);
+  console.log('req11 : ' , req._events);
+  console.log('req22 : ' , req.body);
+  console.log('req33 : ' , req.data);
 
-  var jsonParse = JSON.parse(req.params.info); // 문자열을 json으로 파싱
+ // var jsonParse = JSON.parse(req.params.info); // 문자열을 json으로 파싱
   
-  var email = jsonParse.email
-  var password = jsonParse.password
+  var email = req.body.email
+  var password = req.body.passwd
 
   console.log('email : ',email)
   console.log('password : ', password)
-
   loginProcess(res, email, password);
 })
 

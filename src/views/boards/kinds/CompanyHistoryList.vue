@@ -45,16 +45,11 @@ export default {
 
     data(){
       return {
-        ///testData : null  
         subject : "companyHistory"
       }
     },
 
     computed : {
-      testData(){
-          return this.$store.state
-      },
-
       ...mapState(['isLogin'])
     }
 

@@ -84,6 +84,9 @@ export default {
         const jsonData = JSON.stringify(this.user)
         console.log('json : ', jsonData)
 
+
+    /*
+
       // 로그인 확인
       axios.post(`http://localhost:4000/login_process/${jsonData}`, {
 
@@ -120,6 +123,48 @@ export default {
         }).catch(err => {
             console.log('err : ', err)
         })
+
+    */
+
+     axios.post('http://localhost:4000/login_process', {
+        email : this.user.email,
+        passwd : this.user.password
+    }).then(res => {
+        console.log('res_login_datas : ', res)
+        
+            // 로그인 결과
+            var response = res.data
+
+            // 유저정보 저장(admin_id, name)
+            var userInfo = res.data.recordset
+            console.log('userInfo : ', userInfo)
+            
+
+            if(response == 'failed'){
+                 alert('아이디나 비밀번호가 틀렸습니다. ')
+                this.$store.commit('loginError')
+
+            }else {
+                 //alert('로그인 성공')
+                this.$store.commit('loginSuccess', userInfo)   // store.index.js 파일의 mutations의 loginSuccess함수 호출 , 두번째 인자는 loginSuccess함수에 전달하는 값
+                      
+                // 공지사랑 전체목록으로
+                this.$router.push(
+                  {
+                    name : 'Notice'
+                  }
+                )
+            }
+    })
+    
+    .catch(function (err){
+      console.log('err : ', err)
+    })
+
+
+
+
+
 
     }
   }
