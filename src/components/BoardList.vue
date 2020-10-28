@@ -11,6 +11,7 @@
     :search="searchText"
     :items-per-page="itemsPerPage"
     @page-count="pageCount = $event"
+    @input="handleClick"
     @click:row="click"
   >
  
@@ -19,17 +20,17 @@
       style="margin-bottom:30px;">
 
         <v-toolbar-title
-            v-if="propsdata === 'notice'">
+            v-if="propsdata.subject === 'notice'">
             공지사항
         </v-toolbar-title>
 
         <v-toolbar-title
-            v-else-if="propsdata === 'archievement'">
+            v-else-if="propsdata.subject === 'archievements'">
             국내외 개발실적
         </v-toolbar-title>
 
         <v-toolbar-title
-            v-else-if="propsdata === 'companyHistory'">
+            v-else-if="propsdata.subject === 'companyHistory'">
             회사연혁
         </v-toolbar-title>
 
@@ -87,11 +88,22 @@ import { pageNumEventBus } from '@/main.js';
 
 
 export default {
-    props : ['propsdata'],
+     //props : ['propsdata'],
+
+
+    props : {
+        propsdata: {
+            type : Object
+        }
+    },
+
     data: () => ({
         dialog: false,
         headers: [],
+
         desserts: [],
+        temp_desserts:[],
+
         editedIndex: -1,
     
         searchText : null,
@@ -107,10 +119,6 @@ export default {
         }),
 
         computed: {
-            formTitle () {
-                return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-            },
-
              ...mapState(["boardName"]),
              ...mapState(["boardCurrentPageNum"]),
         },
@@ -123,9 +131,20 @@ export default {
         
 
         async created(){ 
-            console.log('propss : ', this.propsdata)
 
-            if(this.propsdata === 'archievement' || this.propsdata === 'companyHistory'){
+            // 처음 페이지 로드 시
+            if(this.propsdata.pageNum != null){
+                //this.page = this.propsdata.pageNum
+            }else{
+                //this.page = this.boardCurrentPageNum
+            }
+
+            console.log('pageNum : ', this.page)
+            console.log('propss.subject : ', this.propsdata.subject)
+            console.log('propss.pageNum : ', this.propsdata.pageNum)
+            console.log('boardCurrentPageNum : ', this.boardCurrentPageNum)
+
+            if(this.propsdata.subject === 'archievements' || this.propsdata.subject === 'companyHistory'){
                 this.headers = [
                     {
                     text: '번호',
@@ -137,7 +156,7 @@ export default {
                     { text: '제목', value: 'title', sortable: false},
                     { text: '내용', value: 'content',  sortable: false},
                 ]
-            }else if (this.propsdata === 'notice'){
+            }else if (this.propsdata.subject === 'notice'){
                 this.headers = [
                     {
                     text: '번호',
@@ -147,32 +166,70 @@ export default {
                     },
                     { text: '제목', sortable: false, value: 'title' },
                     { text: '조회수',  sortable: false, value: 'hit' },
-                    { text: '등록일',  sortable: false, value: 'rgst_dt' },
+                    { text: '등록일',  sortable: false, value: 'date' },
                 
                 ]
             }
 
 
-            if(this.propsdata === 'notice'){
+            if(this.propsdata.subject === 'notice'){
                 this.detailName = 'NoticeDetail'    
                 this.registerName = 'NoticeRegister'   
                 this.updateName = 'NoticeUpdate'
-            }else if(this.propsdata === 'archievement'){
+            }else if(this.propsdata.subject === 'archievements'){
                 this.detailName = 'ArchievementDetail'
                 this.registerName = 'ArchievementRegister'
                 this.updateName = 'ArchievementUpdate'   
-            }else if(this.propsdata === 'companyHistory'){        
+            }else if(this.propsdata.subject === 'companyHistory'){        
                 this.detailName = 'CompanyHistoryDetail'
                 this.registerName = 'CompanyHistoryRegister'
                 this.updateName = 'CompanyHistoryUpdate'   
             }
 
             // 서버통신으로 게시판에 맞는 데이터를 불러옴
-            const noticeData = await axios.get(`http://localhost:4000/${this.propsdata}`)
+            // const noticeData = await axios.get(`http://localhost:4000/${this.propsdata.subject}`)
+            const noticeData = await axios.get(`http://api.coresoft.co.kr/api/v1/${this.propsdata.subject}?p=1&rpp=1000`)
             .then(res => {
-                console.log(`res_${this.propsdata}_datas : `, res)
+                console.log(`res_${this.propsdata.subject}_datas : `, res)
+
                 //console.log('items : ', res.data.recordset)
-                this.desserts = res.data.recordset;
+
+                // 기존꺼
+                //this.desserts = res.data.recordset;
+                this.temp_desserts = res.data.items;
+
+                console.log('size : ', this.temp_desserts.length);
+                
+                var year = '';   // 년
+                var month = '';   // 월
+                var day = '';     // 일
+                var sumDate = '';   // 년 월 일
+
+                for(var i = 0; i < this.temp_desserts.length; i++){
+                    //console.log('fpr : ', this.temp_desserts[i])
+
+                    // 공지사항 등록일
+                    if(this.propsdata.subject === 'notice'){
+                         var rgst_Dt = this.temp_desserts[i].rgst_Dt;  
+
+                        console.log(rgst_Dt);
+                        year = rgst_Dt.substring(0,4);
+                        month = rgst_Dt.substring(4,6);
+                        day = rgst_Dt.substring(6,8);
+                        sumDate = year + '.' + month + '.' + day;
+
+                        this.temp_desserts[i].date = sumDate;
+
+                    // 그 외 게시판 등록일
+                    }else{
+                        this.temp_desserts[i].date = this.temp_desserts[i].year + '.' + this.temp_desserts[i].month;
+                    }
+                }
+                
+                console.log(this.temp_desserts);
+
+                this.desserts = this.temp_desserts;
+            
             }).catch(err => {
                 console.log('err : ', err)
             })
@@ -195,7 +252,8 @@ export default {
 
                 var idx = value.idx
                 // var detailName = ''
-
+                
+                // 현재 게시판 page저장
                  pageNumEventBus.getPageNumEventBus(this.page)
 
 
@@ -227,10 +285,26 @@ export default {
                     }
                 }
                 )
-            }
+            },
 
+            handleClick(page){
+                
+            }
+          
     
         },
+
+        mounted(){
+            console.log('BoardList_mounted', + this.propsdata)
+        },
+
+        updated(){
+            console.log('BoardList_updated', + this.propsdata)
+        },
+
+        destroyed(){
+            console.log('BoardList_destoryed', + this.propsdata)
+        }
 }
 </script>
 

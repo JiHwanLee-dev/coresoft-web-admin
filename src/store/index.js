@@ -23,6 +23,7 @@ export default new Vuex.Store({
     boardName : null,
     boardCurrentPageNum : 0,
 
+
   },
   mutations: {
     // 로그인이 성공했을 때
@@ -51,9 +52,9 @@ export default new Vuex.Store({
     },
 
     // 현재 게시판 페이지 번호(일단 보류)
-    // currentBoardPageNum(state, payload){
-    //   state.boardCurrentPageNum = payload
-    // }
+    currentBoardPageNum(state, payload){
+      state.boardCurrentPageNum = payload
+    }
   },
 
   actions: {},

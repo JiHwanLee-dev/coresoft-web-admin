@@ -5,7 +5,7 @@
     <v-main>
       <v-container>
         <BoardList
-          :propsdata="subject"/>
+          :propsdata="datas"/>
       </v-container>
     </v-main>
     
@@ -34,19 +34,30 @@ export default {
         Footer,
     },
 
-    props : {
-
-    },
 
     created(){
       console.log('Notice_Created')
-      this.$store.commit('currentBoardName', this.subject)
+      this.$store.commit('currentBoardName', this.datas.subject)
+
+
+      if(this.$route.params.page != null){
+        console.log('params_page : ', this.$route.params.page);
+        this.datas.pageNum = this.$route.params.page;
+      }
+
     },
 
     data(){
       return {
         ///testData : null  
-        subject : "notice"
+
+        datas : {
+          subject : "notice",
+          pageNum : null
+        }
+      
+
+        
       }
     },
 

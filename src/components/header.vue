@@ -6,7 +6,7 @@
     >
       <v-list dense>
         <v-list-item link
-        router :to="{name : 'Notice'}" exact>
+        router :to="{name : 'Notice', params : {'page' : 1}}" exact>
           <v-list-item-action>
             <v-icon>mdi-note</v-icon>
           </v-list-item-action>
@@ -15,7 +15,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item link
-         router :to="{name : 'Archievement'}" exact>
+         router :to="{name : 'Archievement', params : {'page' : 1}}" exact>
           <v-list-item-action>
             <v-icon>mdi-note</v-icon>
           </v-list-item-action>
@@ -24,7 +24,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item link
-         router :to="{name : 'CompanyHistory'}" exact>
+         router :to="{name : 'CompanyHistory', params : {'page' : 1}}" exact>
           <v-list-item-action>
             <v-icon>mdi-note</v-icon>
           </v-list-item-action>

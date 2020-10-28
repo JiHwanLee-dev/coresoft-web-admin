@@ -126,9 +126,24 @@ export default {
 
     */
 
-     axios.post('http://localhost:4000/login_process', {
-        email : this.user.email,
-        passwd : this.user.password
+   
+    //  axios.post('http://api.coresoft.co.kr/api/v1/auth', {
+    //  //axios.post('http://localhost:4000/login_process', {
+    //     //email : this.user.email,
+    //     //passwd : this.user.password,
+    //     jsonData,
+    //     headers: config
+
+      // 밑에 방식으로 해야지 동작이 됨;;
+
+        axios({
+          url: "http://api.coresoft.co.kr/api/v1/auth",
+          method: "post",
+          data: jsonData,
+          headers: {
+            'content-type': 'application/json',            
+          }
+       
     }).then(res => {
         console.log('res_login_datas : ', res)
         
@@ -138,9 +153,9 @@ export default {
             // 유저정보 저장(admin_id, name)
             var userInfo = res.data.recordset
             console.log('userInfo : ', userInfo)
-            
+            console.log('response : ', response.ok)
 
-            if(response == 'failed'){
+            if(response.ok == false){
                  alert('아이디나 비밀번호가 틀렸습니다. ')
                 this.$store.commit('loginError')
 
@@ -148,7 +163,7 @@ export default {
                  //alert('로그인 성공')
                 this.$store.commit('loginSuccess', userInfo)   // store.index.js 파일의 mutations의 loginSuccess함수 호출 , 두번째 인자는 loginSuccess함수에 전달하는 값
                       
-                // 공지사랑 전체목록으로
+                // 공지사항 전체목록으로
                 this.$router.push(
                   {
                     name : 'Notice'

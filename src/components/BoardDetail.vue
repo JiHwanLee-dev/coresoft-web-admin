@@ -131,17 +131,19 @@ export default {
 
     // 문자열로 변환해서 서버에 보내줌.
     const boardInfos = JSON.stringify(this.boardInfo)
-   
+
       // 서버통신으로 notice 특정 데이터를 불러옴
      console.log('index : ', this.$route.query.index);
-     const noticeData = await axios.get(`http://localhost:4000/detail/${boardInfos}`, {
+     //const noticeData = await axios.get(`http://localhost:4000/detail/${boardInfos}`, {
+     await axios.get(`http://api.coresoft.co.kr/api/v1/notice/3021`, {
        //index : this.$route.query.index
+       //boardInfo
      })
       .then(res => {
           console.log(`res_${this.subject}_detail_datas : `, res)
           //console.log('items : ', res.data.recordset)
           //this.desserts = res.data.recordset;
-          console.log(res.data.recordset[0].title)
+          console.log(res.data.recordset[0].title);
           this.title = res.data.recordset[0].title;
           this.content = res.data.recordset[0].content;
           this.writer = res.data.recordset[0].rgst_id;
@@ -177,7 +179,7 @@ export default {
     //     alert('뒤로가기')
     // }
   },
-
+  
   methods : {
     // 목록으로 돌아가기
     getList(){
@@ -259,6 +261,7 @@ export default {
 
         console.log('boardInfo : ', boardInfos);
         const noticeData = await axios.get(`http://localhost:4000/delete/${boardInfos}`, {
+        //const noticeData = await axios.get(`http://localhost:4000/delete/${boardInfos}`, {
           //index : this.$route.query.index
         })
         .then(res => {

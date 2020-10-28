@@ -56,6 +56,7 @@ app.use(express.json())                                     // 이 코드가 있
 
 // 공지사항 전체목록 보기
 app.get('/notice', (req, res) => {
+  console.log('noticeList');
   getNoticeList(res, req);
 })
 async function getNoticeList(res,req){
@@ -321,7 +322,6 @@ async function getDelete(res, req, index){
 // 로그인 정보 확인
 app.post('/login_process', (req, res) => {
   console.log('req : ' , req);
-  console.log('req11 : ' , req._events);
   console.log('req22 : ' , req.body);
   console.log('req33 : ' , req.data);
 

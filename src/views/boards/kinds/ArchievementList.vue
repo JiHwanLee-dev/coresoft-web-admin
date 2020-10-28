@@ -5,7 +5,7 @@
     <v-main>
       <v-container>
         <BoardList
-          :propsdata="subject"/>
+          :propsdata="datas"/>
       </v-container>
     </v-main>
     
@@ -40,12 +40,20 @@ export default {
 
     created(){
       console.log('Notice_Created') 
-       this.$store.commit('currentBoardName', this.subject)           // 게시판 이름을 store에 저장함.
+       this.$store.commit('currentBoardName', this.datas.subject)           // 게시판 이름을 store에 저장함.
+
+       if(this.$route.params.page != null){
+        console.log('params_page : ', this.$route.params.page);
+        this.datas.pageNum = this.$route.params.page;
+      }
     },
 
     data(){
       return {
-        subject : "archievement"
+        datas : {
+          subject : "archievements",
+          pageNum : null
+        }
       }
     },
 

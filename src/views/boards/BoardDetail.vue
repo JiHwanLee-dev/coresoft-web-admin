@@ -42,7 +42,7 @@ export default {
       console.log('NoticeDetail_created')
       console.log('query : ', this.$route.query.index)
       this.subject = this.$store.state.boardName
-      console.log('subject : ', this.subject)
+      console.log('subjects : ', this.subject)
   },
 
   mounted(){
