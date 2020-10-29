@@ -13,6 +13,7 @@
     @page-count="pageCount = $event"
     @input="handleClick"
     @click:row="click"
+    @current-items="getCurrentItems"
   >
  
     <template v-slot:top>
@@ -103,6 +104,7 @@ export default {
 
         desserts: [],
         temp_desserts:[],
+        current_items:[],
 
         editedIndex: -1,
     
@@ -121,6 +123,7 @@ export default {
         computed: {
              ...mapState(["boardName"]),
              ...mapState(["boardCurrentPageNum"]),
+             ...mapState(["boardCurrentList"]),
         },
 
         watch: {
@@ -137,12 +140,18 @@ export default {
                 //this.page = this.propsdata.pageNum
             }else{
                 //this.page = this.boardCurrentPageNum
+
             }
+
 
             console.log('pageNum : ', this.page)
             console.log('propss.subject : ', this.propsdata.subject)
             console.log('propss.pageNum : ', this.propsdata.pageNum)
             console.log('boardCurrentPageNum : ', this.boardCurrentPageNum)
+            console.log('boardCurrentList : ', this.boardCurrentList)
+            
+
+
 
             if(this.propsdata.subject === 'archievements' || this.propsdata.subject === 'companyHistory'){
                 this.headers = [
@@ -170,6 +179,8 @@ export default {
                 
                 ]
             }
+
+            
 
 
             if(this.propsdata.subject === 'notice'){
@@ -226,13 +237,18 @@ export default {
                     }
                 }
                 
-                console.log(this.temp_desserts);
+                //console.log(this.temp_desserts);
 
                 this.desserts = this.temp_desserts;
+
+                console.log('desserts : ', this.desserts)
             
             }).catch(err => {
                 console.log('err : ', err)
             })
+
+
+            
         
     },
 
@@ -252,6 +268,8 @@ export default {
 
                 var idx = value.idx
                 // var detailName = ''
+
+               
                 
                 // 현재 게시판 page저장
                  pageNumEventBus.getPageNumEventBus(this.page)
@@ -259,6 +277,9 @@ export default {
 
                 this.$store.commit('currentBoardPageNum', this.page) 
                 console.log('currentPageNum : ', this.boardCurrentPageNum);
+
+                this.$store.commit('currentBoardList', this.current_items)
+                 console.log('current_items : ',this.current_items)
 
 
                 // 상세보기
@@ -289,6 +310,12 @@ export default {
 
             handleClick(page){
                 
+            },
+            
+            
+            getCurrentItems: function(value){
+                console.log('valeu : ', value)
+                this.current_items = value
             }
           
     

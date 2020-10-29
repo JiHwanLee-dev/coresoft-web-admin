@@ -12,7 +12,7 @@
           </h2>
 
           <h2
-          v-else-if="propsdata === 'archievement'"> 국내외 개발실적 
+          v-else-if="propsdata === 'archievements'"> 국내외 개발실적 
           </h2>
 
            <h2
@@ -26,7 +26,7 @@
               sm="8"
               cols="12" >
               <v-text-field
-                :value="title"
+                :value="boardInfo.title"
                 label="제목"
                 outlined
                 readonly
@@ -43,7 +43,7 @@
                 name="input-7-4"
                 label="내용"
                 readonly
-                :value="content"
+                :value="boardInfo.content"
               ></v-textarea>
               
               <v-layout
@@ -57,8 +57,11 @@
                  </v-btn>
               </v-row>
 
+
+
+               <!-- v-if="this.userInfo === this.writer" -->
                <v-row
-               v-if="this.userInfo[0].admin_id === this.writer"
+            
               justify="end">
                 <v-btn
                 style="margin-right: 5px;"
@@ -98,20 +101,19 @@ export default {
   data() {
     return {
       setIndex : '',
-      title : '',
-      content : '',
-      writer : null,
-      year : null,
-      month : null,
+     
 
 
       boardInfo : {
-        index : null,
-        subject : null,
-        title : this.title,
-        content : this.content,
-        writer : this.writer,
+        idx : '',
+        subject : '',
+        title : '',
+        content : '',
+        writer : '',
         use_yn : 'N',
+        year : '',
+        month : '',
+        adminId : '',
       }
     }
   },
@@ -124,34 +126,38 @@ export default {
   async created(){
     
     console.log('propsdata : ',this.propsdata);
+    console.log('userInfo : ', this.userInfo);
 
-    this.boardInfo.subject = this.propsdata
-    this.boardInfo.index = this.$route.query.index;
-    this.boardInfo.userId = this.userInfo[0].admin_id
+    // this.boardInfo.subject = this.propsdata
+    // this.boardInfo.index = this.$route.query.index;
+    // this.boardInfo.userId = this.userInfo[0].admin_id
+    
 
     // 문자열로 변환해서 서버에 보내줌.
-    const boardInfos = JSON.stringify(this.boardInfo)
+    //const boardInfos = JSON.stringify(this.boardInfo)
 
-      // 서버통신으로 notice 특정 데이터를 불러옴
-     console.log('index : ', this.$route.query.index);
+     this.boardInfo.adminId = this.userInfo;
+     this.boardInfo.idx = Number(this.$route.query.index);
+       // 서버통신으로 notice 특정 데이터를 불러옴
+     console.log(' boardInfo.idx : ', this. boardInfo.idx);
+
+     
+
      //const noticeData = await axios.get(`http://localhost:4000/detail/${boardInfos}`, {
-     await axios.get(`http://api.coresoft.co.kr/api/v1/notice/3021`, {
-       //index : this.$route.query.index
-       //boardInfo
-     })
+    const noticeData = await axios.get(`http://api.coresoft.co.kr/api/v1/${this.propsdata}/${this.$route.query.index}`)
       .then(res => {
-          console.log(`res_${this.subject}_detail_datas : `, res)
-          //console.log('items : ', res.data.recordset)
-          //this.desserts = res.data.recordset;
-          console.log(res.data.recordset[0].title);
-          this.title = res.data.recordset[0].title;
-          this.content = res.data.recordset[0].content;
-          this.writer = res.data.recordset[0].rgst_id;
-          this.year = res.data.recordset[0].year;
-          this.month = res.data.recordset[0].month;
+          console.log(`res_${this.propsdata}_detail_datas : `, res)
+          console.log(res.data.title);
+          this.boardInfo.title = res.data.title;
+          this.boardInfo.content = res.data.content;
+          this.boardInfo.writer = res.data.rgst_id;
+          this.boardInfo.year = res.data.year;
+          this.boardInfo.month = res.data.month;
       }).catch(err => {
           console.log('err : ', err)
       })
+
+      
     
     // pageNumEventBus.$on('getPageNumEventBus', (date) => {
     //     console.log('currentBuss : ', date)
@@ -199,13 +205,14 @@ export default {
         {
           name : 'Update',
           params : {
-            subject : this.subject,
-            title : this.title,
-            content : this.content,
-            writer : this.writer,
-            index : this.$route.query.index,
-            year : this.year,
-            month : this.month,
+            subject : this.propsdata,
+            title : this.boardInfo.title,
+            content : this.boardInfo.content,
+            writer : this.boardInfo.writer,
+            index : this.boardInfo.idx,
+            year : this.boardInfo.year,
+            month : this.boardInfo.month,
+          
           }
         }
       )
@@ -260,33 +267,41 @@ export default {
         const boardInfos = JSON.stringify(this.boardInfo)
 
         console.log('boardInfo : ', boardInfos);
-        const noticeData = await axios.get(`http://localhost:4000/delete/${boardInfos}`, {
-        //const noticeData = await axios.get(`http://localhost:4000/delete/${boardInfos}`, {
-          //index : this.$route.query.index
+        //await axios.get(`http://localhost:4000/delete/${boardInfos}`, {
+        axios({  
+              url: `http://api.coresoft.co.kr/api/v1/${this.propsdata}/${this.boardInfo.idx}`,
+              method: "delete",
+              data: this.boardInfo,
+              headers: {
+                    'content-type': 'application/json',
+              }
         })
         .then(res => {
             console.log('res_delete_datas : ', res)
-        
+
             // 글작성이 완료 되었으므로, 목록화면으로 가야 됨
-                if(res.data === 'notice'){
-                    this.$router.push(
-                        {
-                            name : 'Notice'
-                        }
-                    )
-                }else if(res.data === 'archievement'){
-                    this.$router.push(
-                        {
-                            name : 'Archievement'
-                        }
-                    )
-                }else if(res.data === 'companyHistory'){
-                    this.$router.push(
-                        {
-                            name : 'CompanyHistory'
-                        }
-                    )
-                }
+           if(res.data.ok === true){
+
+                        if(this.propsdata === 'notice'){
+                            this.$router.push(
+                                {
+                                    name : 'Notice'
+                                }
+                            )
+                        }else if(this.propsdata === 'archievements'){
+                            this.$router.push(
+                                {
+                                    name : 'Archievement'
+                                }
+                            )
+                        }else if(this.propsdata === 'companyHistory'){
+                            this.$router.push(
+                                {
+                                    name : 'CompanyHistory'
+                                }
+                            )
+                        }  
+                    }
         }).catch(err => {
             console.log('err : ', err)
         })

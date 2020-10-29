@@ -161,7 +161,8 @@ export default {
 
             }else {
                  //alert('로그인 성공')
-                this.$store.commit('loginSuccess', userInfo)   // store.index.js 파일의 mutations의 loginSuccess함수 호출 , 두번째 인자는 loginSuccess함수에 전달하는 값
+                //this.$store.commit('loginSuccess', userInfo)   // store.index.js 파일의 mutations의 loginSuccess함수 호출 , 두번째 인자는 loginSuccess함수에 전달하는 값
+                this.$store.commit('loginSuccess', this.user.email)   // store.index.js 파일의 mutations의 loginSuccess함수 호출 , 두번째 인자는 loginSuccess함수에 전달하는 값
                       
                 // 공지사항 전체목록으로
                 this.$router.push(
