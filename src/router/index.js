@@ -4,6 +4,7 @@ import VueRouter from "vue-router"
 import Main from "../views/Main.vue"
 import store from "../store"
 import BoardDetail from "../views/boards/BoardDetail.vue"
+//import BoardDetail from "../components/BoardDetail.vue"
 
 
 Vue.use(VueRouter)
@@ -69,6 +70,14 @@ const routes = [
       //   }
       // ]
     
+  },
+
+  {
+    path: "/test2",
+    name: "Test2",
+    beforeEnter : OnlyAuthUser,
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/boards/kinds/Test2.vue")
   },
 
 

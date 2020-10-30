@@ -33,17 +33,29 @@
           </v-list-item-content>
         </v-list-item>
 
-        <!-- <v-list-item link
-         router :to="{name : 'Test', params : {idx : '123'}}" exact>
+      <!-- 
+      <v-list-item link
+         router :to="{name : 'Test', params : {'page' : 1}}" exact>
           <v-list-item-action>
             <v-icon>mdi-note</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Test</v-list-item-title>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item> 
       </v-list>
-      
+      <v-list-item link
+         router :to="{name : 'Test2', params : {'page' : 1}}" exact>
+          <v-list-item-action>
+            <v-icon>mdi-note</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Test2</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item> 
+          -->
+          
+      </v-list>
     </v-navigation-drawer>
 
     <v-app-bar

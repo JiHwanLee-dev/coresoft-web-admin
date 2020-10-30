@@ -7,6 +7,7 @@ import BoardList from "./components/BoardList"
 import BoardRegister from "./components/BoardRegister"
 import BoardDetail from "./components/BoardDetail"
 import BoardUpdate from "./components/BoardUpdate"
+import Test2 from "./components/Test2"
 
 export const pageNumEventBus = new Vue({
   methods : {
@@ -21,6 +22,7 @@ Vue.component('BoardList', BoardList)
 Vue.component('BoardRegister', BoardRegister)
 Vue.component('BoardDetail', BoardDetail)
 Vue.component('BoardUpdate', BoardUpdate)
+Vue.component('Test2', Test2)
 
 Vue.config.productionTip = false;
 

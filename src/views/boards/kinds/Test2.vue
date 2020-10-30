@@ -4,7 +4,7 @@
     
     <v-main>
       <v-container>
-        <BoardList
+        <Test2
           :propsdata="datas"/>
       </v-container>
     </v-main>
@@ -36,7 +36,7 @@ export default {
 
 
     created(){
-      console.log('Notice_Created')
+      console.log('Test2_Created')
       this.$store.commit('currentBoardName', this.datas.subject)
 
       if(this.$route.params.page != null){
@@ -51,7 +51,7 @@ export default {
         ///testData : null  
 
         datas : {
-          subject : "notice",
+          subject : "Test2",
           pageNum : null
         }
       }

@@ -15,6 +15,7 @@
     @click:row="click"
     @current-items="getCurrentItems"
   >
+
  
     <template v-slot:top>
       <v-toolbar flat color="white"
@@ -110,7 +111,7 @@ export default {
     
         searchText : null,
 
-        page: 1,
+        page: null,
         pageCount: 0,
         itemsPerPage: 10,
 
@@ -127,32 +128,37 @@ export default {
         },
 
         watch: {
-            dialog (val) {
-                val || this.close()
-            },
+           
         },
-        
 
-        async created(){ 
+        beforeCreate(){
+            
+        },
+
+         created(){ 
+            console.log('craete()');
+
+/*
 
             // 처음 페이지 로드 시
             if(this.propsdata.pageNum != null){
-                //this.page = this.propsdata.pageNum
+                this.page = this.propsdata.pageNum
             }else{
-                //this.page = this.boardCurrentPageNum
-
+                this.page = this.boardCurrentPageNum
+                //this.page = this.$route.params.page
             }
 
 
             console.log('pageNum : ', this.page)
             console.log('propss.subject : ', this.propsdata.subject)
             console.log('propss.pageNum : ', this.propsdata.pageNum)
-            console.log('boardCurrentPageNum : ', this.boardCurrentPageNum)
+            console.log('boardCurrentPageNumS : ', this.boardCurrentPageNum)
             console.log('boardCurrentList : ', this.boardCurrentList)
+            //console.log(':page.sync : ', )
+
+
+            */
             
-
-
-
             if(this.propsdata.subject === 'archievements' || this.propsdata.subject === 'companyHistory'){
                 this.headers = [
                     {
@@ -165,7 +171,10 @@ export default {
                     { text: '제목', value: 'title', sortable: false},
                     { text: '내용', value: 'content',  sortable: false},
                 ]
+
             }else if (this.propsdata.subject === 'notice'){
+
+                
                 this.headers = [
                     {
                     text: '번호',
@@ -178,9 +187,24 @@ export default {
                     { text: '등록일',  sortable: false, value: 'date' },
                 
                 ]
-            }
+                
+                /*
+                this.headers = [
+                    {
+                        text: 'Dessert (100g serving)',
+                        align: 'start',
+                        sortable: false,
+                        value: 'name',
+                    },
+                    { text: 'Calories', value: 'calories' },
+                    { text: 'Fat (g)', value: 'fat' },
+                    { text: 'Carbs (g)', value: 'carbs' },
+                    { text: 'Protein (g)', value: 'protein' },
+                    { text: 'Iron (%)', value: 'iron' },
+                    ]
+                */
 
-            
+            }
 
 
             if(this.propsdata.subject === 'notice'){
@@ -197,9 +221,12 @@ export default {
                 this.updateName = 'CompanyHistoryUpdate'   
             }
 
+
+            /*
+
             // 서버통신으로 게시판에 맞는 데이터를 불러옴
             // const noticeData = await axios.get(`http://localhost:4000/${this.propsdata.subject}`)
-            const noticeData = await axios.get(`http://api.coresoft.co.kr/api/v1/${this.propsdata.subject}?p=1&rpp=1000`)
+            const noticeData =  axios.get(`http://api.coresoft.co.kr/api/v1/${this.propsdata.subject}?p=1&rpp=1000`)
             .then(res => {
                 console.log(`res_${this.propsdata.subject}_datas : `, res)
 
@@ -223,7 +250,7 @@ export default {
                     if(this.propsdata.subject === 'notice'){
                          var rgst_Dt = this.temp_desserts[i].rgst_Dt;  
 
-                        console.log(rgst_Dt);
+                        //console.log(rgst_Dt);
                         year = rgst_Dt.substring(0,4);
                         month = rgst_Dt.substring(4,6);
                         day = rgst_Dt.substring(6,8);
@@ -247,6 +274,8 @@ export default {
                 console.log('err : ', err)
             })
 
+            */
+
 
             
         
@@ -260,7 +289,7 @@ export default {
                     //console.log("value : " + value[key])
                 }
 
-                console.log(value.idx)
+                //console.log(value.idx)
 
                 console.log('page : ', this.page)
                 console.log('pageCount : ', this.pageCount)
@@ -286,8 +315,13 @@ export default {
                 this.$router.push(
                      {name : this.detailName,
                          query : {
-                             index : idx
+                             //page : this.page,
+                             index : idx,
+                         },
+                         params : {
+                             page : this.page
                          }
+
                      }
                  ) 
             },
@@ -311,18 +345,109 @@ export default {
             handleClick(page){
                 
             },
+
+            
             
             
             getCurrentItems: function(value){
-                console.log('valeu : ', value)
+                console.log('현재 페이지 아이템 : ', value)
                 this.current_items = value
-            }
+                console.log('현재 페이지 번호 : ', this.page)
+                //this.boardCurrentPageNum = this.page
+                //value = null
+               
+            },
+
+            
+
+            // pageCount: function(value){
+            //      console.log('valeu : ', value)
+            // }
           
     
         },
 
         mounted(){
             console.log('BoardList_mounted', + this.propsdata)
+
+
+
+            console.log('pageNum : ', this.page)
+            console.log('propss.subject : ', this.propsdata.subject)
+            console.log('propss.pageNum : ', this.propsdata.pageNum)
+            console.log('boardCurrentPageNumS : ', this.boardCurrentPageNum)
+            console.log('boardCurrentList : ', this.boardCurrentList)
+            //console.log(':page.sync : ', )
+
+            // 서버통신으로 게시판에 맞는 데이터를 불러옴
+            // const noticeData = await axios.get(`http://localhost:4000/${this.propsdata.subject}`)
+            const noticeData =  axios.get(`http://api.coresoft.co.kr/api/v1/${this.propsdata.subject}?p=1&rpp=1000`)
+            .then(res => {
+                console.log(`res_${this.propsdata.subject}_datas : `, res)
+
+                //console.log('items : ', res.data.recordset)
+
+                // 기존꺼
+                //this.desserts = res.data.recordset;
+                this.temp_desserts = res.data.items;
+
+                console.log('size : ', this.temp_desserts.length);
+                
+                var year = '';   // 년
+                var month = '';   // 월
+                var day = '';     // 일
+                var sumDate = '';   // 년 월 일
+
+                for(var i = 0; i < this.temp_desserts.length; i++){
+                    //console.log('fpr : ', this.temp_desserts[i])
+
+                    // 공지사항 등록일
+                    if(this.propsdata.subject === 'notice'){
+                         var rgst_Dt = this.temp_desserts[i].rgst_Dt;  
+
+                        //console.log(rgst_Dt);
+                        year = rgst_Dt.substring(0,4);
+                        month = rgst_Dt.substring(4,6);
+                        day = rgst_Dt.substring(6,8);
+                        sumDate = year + '.' + month + '.' + day;
+
+                        this.temp_desserts[i].date = sumDate;
+
+                    // 그 외 게시판 등록일
+                    }else{
+                        this.temp_desserts[i].date = this.temp_desserts[i].year + '.' + this.temp_desserts[i].month;
+                    }
+                }
+                
+                //console.log(this.temp_desserts);
+
+                this.desserts = this.temp_desserts;
+
+                console.log('desserts : ', this.desserts)
+
+
+
+                /* 
+
+                desserts변수에 데이터들을 대입했을 때 page번호를 설정함. 
+                게시판 목록 데이터들이 axios통신으로 다 가져오기 전에 page를 설정해버리면,
+                pagenation에는 page번호가 맞게 뜨는데, 게시판 목록 데이터들은 첫페이지 목록부터 보임
+               
+                */
+
+
+                  // 처음 페이지 로드 시
+                if(this.propsdata.pageNum != null){
+                    this.page = this.propsdata.pageNum
+                }else{
+                    this.page = this.boardCurrentPageNum
+                    //this.page = this.$route.params.page
+                }
+            
+            }).catch(err => {
+                console.log('err : ', err)
+            })
+            
         },
 
         updated(){

@@ -121,12 +121,18 @@ export default {
   computed : {
       ...mapState(["boardName"]),
       ...mapState(["userInfo"]),
+      ...mapState(["boardCurrentPageNum"]),
+      
   },
 
   async created(){
     
     console.log('propsdata : ',this.propsdata);
     console.log('userInfo : ', this.userInfo);
+    console.log('pageNum : ', this.boardCurrentPageNum);
+    console.log('query_page : ', this.$route.params.page);
+    console.log('currentboardname : ', this.boardName);
+
 
     // this.boardInfo.subject = this.propsdata
     // this.boardInfo.index = this.$route.query.index;
@@ -144,7 +150,7 @@ export default {
      
 
      //const noticeData = await axios.get(`http://localhost:4000/detail/${boardInfos}`, {
-    const noticeData = await axios.get(`http://api.coresoft.co.kr/api/v1/${this.propsdata}/${this.$route.query.index}`)
+    const noticeData = await axios.get(`http://api.coresoft.co.kr/api/v1/${this.boardName}/${this.$route.query.index}`)
       .then(res => {
           console.log(`res_${this.propsdata}_detail_datas : `, res)
           console.log(res.data.title);
@@ -173,6 +179,7 @@ export default {
         //alert('뒤로가기')
         //pageNumEventBus.$emit('currentPageNum', 2);
         //this.$router.go(-1)
+        console.log(window.history, "location : ", document.location)
     }
 
     
@@ -181,23 +188,51 @@ export default {
   mounted(){
     window.scrollTo(0,0)  // 스크롤 위치 최상단으로 
 
-    //  window.onpopstate = function(event){
-    //     alert('뒤로가기')
-    // }
+    
+
+     window.onpopstate = function(event){
+          console.log(' ---------------- 뒤로가기 ---------------------')
+          alert('뒤로가기')
+    }
   },
   
   methods : {
     // 목록으로 돌아가기
     getList(){
-      console.log('index : ', this.$route.query.index)
+      console.log('getList_index : ', this.$route.query.index)
 
-       this.$router.back()
+       //this.$router.back()
+        var names = '';
 
-    //   this.$router.push(
-    //     {
-    //       name : 'CompanyHistory'
-    //     }
-    //   )
+       if(this.propsdata === 'companyHistory'){
+          names = 'CompanyHistory' 
+       }else if(this.propsdata === 'archievements'){
+          names = 'Archievement'
+       }else if(this.propsdata === 'notice'){
+          names = 'Notice'
+       }
+
+      this.$router.push(
+        {
+          name : names,
+          params : {
+            page : this.boardCurrentPageNum
+          }
+        }
+      )
+
+      
+      // this.$router.push(
+      //   {
+      //     name : "Test",
+      //     params : {
+      //       page : this.boardCurrentPageNum
+      //     }
+      //   }
+      // )
+
+
+
     },
 
     update() {
@@ -209,7 +244,7 @@ export default {
             title : this.boardInfo.title,
             content : this.boardInfo.content,
             writer : this.boardInfo.writer,
-            index : this.boardInfo.idx,
+            index : this.boardInfo.idx,                                                                                                                                                                                                                                                                                                                                                                                                                       
             year : this.boardInfo.year,
             month : this.boardInfo.month,
           
@@ -230,7 +265,7 @@ export default {
             var date = dt.getDate();
             var hours = dt.getHours();
             var minutes = dt.getMinutes();
-            var seconds = dt.getSeconds();
+            var seconds = dt.getSeconds();                                                                         
 
             // 한자리 수이면 앞에 0을 붙여 공백을 없앰
 

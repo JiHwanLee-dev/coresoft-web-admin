@@ -32,9 +32,14 @@
 <script>
 import { mapState } from 'vuex';
   export default {
+      props : {
+        propsdata: {
+            type : Object
+        }
+    },
     data () {
       return {
-        page: 1,
+        page: null,
         pageCount: 0,
         itemsPerPage: 7,
         headers: [
@@ -50,7 +55,70 @@ import { mapState } from 'vuex';
           { text: 'Protein (g)', value: 'protein' },
           { text: 'Iron (%)', value: 'iron' },
         ],
-        desserts: [
+        desserts: [],
+      }
+    },
+
+    created() {
+      // 처음 페이지 로드 시
+      
+            
+
+            
+    },
+
+    computed : {
+      ...mapState(["boardCurrentPageNum"]),
+    },
+
+    methods : {
+
+      // 상세보기
+      click(value){
+          console.log(value)
+
+          this.$store.commit('currentBoardPageNum', this.page) 
+          console.log('currentPageNum : ', this.boardCurrentPageNum);
+
+          // 상세보기
+                this.$router.push(
+                     {name : "NoticeDetail",
+                         params : {
+                             page : this.page
+                         }
+                     }
+                 ) 
+
+      },
+
+      getCurrentItems(value){
+        console.log('현재 페이지 아이템 : ', value)
+         console.log('현재 페이지 번호 : ', this.page)
+          
+      }
+    },
+
+    mounted(){
+            console.log('BoardList_mounted', + this.propsdata)
+            
+            if(this.$route.params.page != null){
+              this.page = this.$route.params.page
+            }else {
+              this.page = this.boardCurrentPageNum
+            }
+
+
+            //this.page = this.boardCurrentPageNum
+           
+            console.log('pageNum : ', this.page)
+            console.log('propss.subject : ', this.propsdata.subject)
+            console.log('propss.pageNum : ', this.propsdata.pageNum)
+            console.log('boardCurrentPageNum : ', this.boardCurrentPageNum)
+            console.log('boardCurrentList : ', this.boardCurrentList)
+            console.log(':page.sync : ', )
+
+
+            this.desserts = [
           {
             name: 'Frozen Yogurt',
             calories: 159,
@@ -171,60 +239,18 @@ import { mapState } from 'vuex';
             protein: 7,
             iron: '6%',
           },
-        ],
-      }
-    },
+        ]
 
-    created() {
-      // 처음 페이지 로드 시
-      
-            if(this.$route.params.page != null){
-              this.page = this.$route.params.page
-            }else {
-              this.page = this.boardCurrentPageNum
-            }
+        console.log('desserts : ', this.desserts)
+        },
 
+        updated(){
+            console.log('BoardList_updated', + this.propsdata)
+        },
 
-            //this.page = this.boardCurrentPageNum
-           
-            console.log('pageNum : ', this.page)
-            //console.log('propss.subject : ', this.propsdata.subject)
-            //console.log('propss.pageNum : ', this.propsdata.pageNum)
-            console.log('boardCurrentPageNum : ', this.boardCurrentPageNum)
-            //console.log('boardCurrentList : ', this.boardCurrentList)
-            //console.log(':page.sync : ', )
-    },
-
-    computed : {
-      ...mapState(["boardCurrentPageNum"]),
-    },
-
-    methods : {
-
-      // 상세보기
-      click(value){
-          console.log(value)
-
-          this.$store.commit('currentBoardPageNum', this.page) 
-          console.log('currentPageNum : ', this.boardCurrentPageNum);
-
-          // 상세보기
-                this.$router.push(
-                     {name : "NoticeDetail",
-                         params : {
-                             page : this.page
-                         }
-                     }
-                 ) 
-
-      },
-
-      getCurrentItems(value){
-        console.log('현재 페이지 아이템 : ', value)
-         console.log('현재 페이지 번호 : ', this.page)
-          
-      }
-    }
+        destroyed(){
+            console.log('BoardList_destoryed', + this.propsdata)
+        }
   }
 </script>
 
