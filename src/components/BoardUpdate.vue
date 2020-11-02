@@ -224,7 +224,7 @@ export default {
 
 //"{"Idx":"1032","subject":"companyHistory","Title":"test444_qq_00","Content":"test444_qq_00","AdminId":"zephome","mdfy_dt":"20201028","mdfy_tm":"190515","hit":0,"Year":"2018","Month":"03"}"
                 
-         
+                
 
             // 문자열로 변환해서 서버에 보내줌.
             const boardInfos = JSON.stringify(this.boardInfo)

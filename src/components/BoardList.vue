@@ -136,28 +136,7 @@ export default {
         },
 
          created(){ 
-            console.log('craete()');
-
-/*
-
-            // 처음 페이지 로드 시
-            if(this.propsdata.pageNum != null){
-                this.page = this.propsdata.pageNum
-            }else{
-                this.page = this.boardCurrentPageNum
-                //this.page = this.$route.params.page
-            }
-
-
-            console.log('pageNum : ', this.page)
-            console.log('propss.subject : ', this.propsdata.subject)
-            console.log('propss.pageNum : ', this.propsdata.pageNum)
-            console.log('boardCurrentPageNumS : ', this.boardCurrentPageNum)
-            console.log('boardCurrentList : ', this.boardCurrentList)
-            //console.log(':page.sync : ', )
-
-
-            */
+            console.log('components_craete()');
             
             if(this.propsdata.subject === 'archievements' || this.propsdata.subject === 'companyHistory'){
                 this.headers = [
@@ -187,22 +166,6 @@ export default {
                     { text: '등록일',  sortable: false, value: 'date' },
                 
                 ]
-                
-                /*
-                this.headers = [
-                    {
-                        text: 'Dessert (100g serving)',
-                        align: 'start',
-                        sortable: false,
-                        value: 'name',
-                    },
-                    { text: 'Calories', value: 'calories' },
-                    { text: 'Fat (g)', value: 'fat' },
-                    { text: 'Carbs (g)', value: 'carbs' },
-                    { text: 'Protein (g)', value: 'protein' },
-                    { text: 'Iron (%)', value: 'iron' },
-                    ]
-                */
 
             }
 
@@ -220,64 +183,7 @@ export default {
                 this.registerName = 'CompanyHistoryRegister'
                 this.updateName = 'CompanyHistoryUpdate'   
             }
-
-
-            /*
-
-            // 서버통신으로 게시판에 맞는 데이터를 불러옴
-            // const noticeData = await axios.get(`http://localhost:4000/${this.propsdata.subject}`)
-            const noticeData =  axios.get(`http://api.coresoft.co.kr/api/v1/${this.propsdata.subject}?p=1&rpp=1000`)
-            .then(res => {
-                console.log(`res_${this.propsdata.subject}_datas : `, res)
-
-                //console.log('items : ', res.data.recordset)
-
-                // 기존꺼
-                //this.desserts = res.data.recordset;
-                this.temp_desserts = res.data.items;
-
-                console.log('size : ', this.temp_desserts.length);
-                
-                var year = '';   // 년
-                var month = '';   // 월
-                var day = '';     // 일
-                var sumDate = '';   // 년 월 일
-
-                for(var i = 0; i < this.temp_desserts.length; i++){
-                    //console.log('fpr : ', this.temp_desserts[i])
-
-                    // 공지사항 등록일
-                    if(this.propsdata.subject === 'notice'){
-                         var rgst_Dt = this.temp_desserts[i].rgst_Dt;  
-
-                        //console.log(rgst_Dt);
-                        year = rgst_Dt.substring(0,4);
-                        month = rgst_Dt.substring(4,6);
-                        day = rgst_Dt.substring(6,8);
-                        sumDate = year + '.' + month + '.' + day;
-
-                        this.temp_desserts[i].date = sumDate;
-
-                    // 그 외 게시판 등록일
-                    }else{
-                        this.temp_desserts[i].date = this.temp_desserts[i].year + '.' + this.temp_desserts[i].month;
-                    }
-                }
-                
-                //console.log(this.temp_desserts);
-
-                this.desserts = this.temp_desserts;
-
-                console.log('desserts : ', this.desserts)
-            
-            }).catch(err => {
-                console.log('err : ', err)
-            })
-
-            */
-
-
-            
+       
         
     },
 
@@ -434,6 +340,8 @@ export default {
                 pagenation에는 page번호가 맞게 뜨는데, 게시판 목록 데이터들은 첫페이지 목록부터 보임
                
                 */
+
+               console.log('boardCurrentPageNum : ', this.boardCurrentPageNum);
 
 
                   // 처음 페이지 로드 시

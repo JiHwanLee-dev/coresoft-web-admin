@@ -76,6 +76,15 @@ export default {
     }
   },
 
+  created(){
+    console.log('main_created')
+    console.log('isLogin : ', this.isLogin)
+  },
+
+  computed : {
+    ...mapState(["isLogin"]),
+  },
+
   methods : {
     // 로그인 버튼 클릭
     getLogin() {

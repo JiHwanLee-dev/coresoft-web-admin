@@ -20,11 +20,23 @@ const OnlyAuthUser = (to, from, next) => {
   }
 }
 
+// 로그인 정보가 남아있다면, Main.vue => Notice.vue 로 리다이렉트 함.
+const LoginStatus = (to, from, next) => {
+  if(store.state.isLogin === true){
+    //alert('?')
+    next('/Notice')
+    store.state.boardCurrentPageNum = 1
+  }else{
+    next()
+  }
+}
+
 
 const routes = [
   {
     path: "/",
     name: "Main",
+    beforeEnter : LoginStatus,
     component: Main
   },
   {

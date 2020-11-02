@@ -54,7 +54,7 @@
           </v-list-item-content>
         </v-list-item> 
           -->
-          
+
       </v-list>
     </v-navigation-drawer>
 
@@ -112,6 +112,8 @@ export default {
     methods : {
       logout() {
         this.$store.commit('logout')
+
+        
 
         // Main화면으로//
         this.$router.push(

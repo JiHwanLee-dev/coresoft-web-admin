@@ -45,6 +45,7 @@ export default new Vuex.Store({
       state.isLogin = false
       state.isLoginError = false
       state.userInfo = null
+      state.boardCurrentPageNum = 1
     },
 
     // 현재 유저가 보고있는 게시판 이름
