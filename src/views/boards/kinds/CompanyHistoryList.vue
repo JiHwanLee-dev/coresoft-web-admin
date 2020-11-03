@@ -7,15 +7,15 @@
         <BoardList
           :propsdata="datas"/>
       </v-container>
+       
     </v-main>
     
     <v-footer
       color="indigo"
-      app
     >
-  
-    <Footer/>
-      
+
+      <Footer/>
+   
     </v-footer>
   </v-app>
 

@@ -7,14 +7,15 @@
         <BoardList
           :propsdata="datas"/>
       </v-container>
+  
     </v-main>
-    
+
+    <!-- app 속성 지우면 footer고정 해제됨 -->
     <v-footer
       color="indigo"
-      app
     >
   
-    <Footer/>
+       <Footer/>
       
     </v-footer>
   </v-app>

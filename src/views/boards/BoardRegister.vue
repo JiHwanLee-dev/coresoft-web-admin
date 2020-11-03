@@ -15,7 +15,6 @@
 
     <v-footer
       color="indigo"
-      app
     >
     <Footer/>
     

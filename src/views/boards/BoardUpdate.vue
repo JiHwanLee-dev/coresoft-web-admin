@@ -10,9 +10,9 @@
             :propsdata="subject"/>
       </v-container>
 
+
     <v-footer
       color="indigo"
-      app
     >
     <Footer/>
       

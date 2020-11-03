@@ -1,8 +1,20 @@
 <template>
     <div>
+       <!-- xxxxx 안되는 속성
+
+       hide-overlay 
+       disable-resize-watcher
+       
+
+       temporary : navigation-drawer 숨김
+        -->
         <v-navigation-drawer
-      v-model="drawer"
-      app
+          disable-route-watcher
+          v-model="drawer"
+          app
+          temporary
+     
+     
     >
       <v-list dense>
         <v-list-item link
@@ -33,8 +45,8 @@
           </v-list-item-content>
         </v-list-item>
 
-      <!-- 
-      <v-list-item link
+    
+      <!-- <v-list-item link
          router :to="{name : 'Test', params : {'page' : 1}}" exact>
           <v-list-item-action>
             <v-icon>mdi-note</v-icon>
@@ -43,7 +55,8 @@
             <v-list-item-title>Test</v-list-item-title>
           </v-list-item-content>
         </v-list-item> 
-      </v-list>
+      </v-list> -->
+        <!-- 
       <v-list-item link
          router :to="{name : 'Test2', params : {'page' : 1}}" exact>
           <v-list-item-action>
@@ -61,14 +74,14 @@
     <v-app-bar
       app
       dark
-      shrink-on-scroll
+      elevate-on-scroll
       color="indigo darken-2"
- 
+      
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>CoreSoft</v-toolbar-title>
       <v-spacer></v-spacer>
-    
+
       <!-- 로그인이 되어 있으면 로그아웃 버튼 생성 -->
       <v-menu offset-y
         v-if="isLogin">
@@ -113,7 +126,7 @@ export default {
       logout() {
         this.$store.commit('logout')
 
-        
+
 
         // Main화면으로//
         this.$router.push(

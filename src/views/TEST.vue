@@ -26,6 +26,26 @@
         @input="itemsPerPage = parseInt($event, 10)"
       ></v-text-field>
     </div>
+
+    <hr>
+    <h1>{{ count }}</h1><br>
+    <h1>{{ calculated }}</h1><br>
+   
+  <!--computed의 calculated안의 함수를 실행시키기 위해서는 calculated를 실제로 출력해야 합니다.-->
+  <!-- {{ calculated }} -->
+  <button @click="count --">카운트 감소</button>
+
+  <div id="app">
+  <p>count: {{ count }}</p>
+  <p>second count: {{ secondCount }}</p>
+  <p>computed: {{ double }}</p>
+  <p>methods: {{ triple() }}</p>
+  <p>methods: {{ test() }}</p>
+  <button v-on:click="count ++">클릭</button> |
+  <button v-on:click="secondCount ++">클릭</button> |
+  <button v-on:click="test">클릭</button>
+</div>
+
   </div>
 </template>
 
@@ -34,6 +54,8 @@ import { mapState } from 'vuex';
   export default {
     data () {
       return {
+        secondCount : 3,
+        count : 3,
         page: 1,
         pageCount: 0,
         itemsPerPage: 7,
@@ -195,12 +217,38 @@ import { mapState } from 'vuex';
             //console.log(':page.sync : ', )
     },
 
+    watch : {
+      count : function(newVal) {
+        if(newVal === 0){
+          alert('값이 0이 되었습니다. ')
+          this.count = 3
+        }
+      }
+    },
+
     computed : {
       ...mapState(["boardCurrentPageNum"]),
+      calculated : function() {
+        if(this.count === 2){
+          alert('값이 2가 되엇음.')
+        }
+      },
+
+      double : function () {
+        console.log('Computed double')
+        return this.count * 2
+      }
     },
 
     methods : {
 
+      triple() {
+        console.log('methods triple')
+        return this.count * 3
+      },
+      test() {
+        console.log('methods click')
+      },
       // 상세보기
       click(value){
           console.log(value)
